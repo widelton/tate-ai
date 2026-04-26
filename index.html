@@ -302,11 +302,21 @@ async function loadData() {
     const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/35nKRCW9BZhkbmp2zhyZ428saV3X46M9UUUqSj1b6Lvt");
     const data = await res.json();
 
-    const pair = data.pairs[0]; //
+    const pair = data?.pairs?.[0];
 
-    document.getElementById("price").innerText = "$" + Number(pair.priceUsd).toFixed(6);
-    document.getElementById("change").innerText = pair.priceChange.h24 + "%";
-    document.getElementById("volume").innerText = "$" + Math.round(pair.volume.h24);
+    if (!pair) {
+      console.log("No pair data yet");
+      return;
+    }
+
+    document.getElementById("price").innerText =
+      "$" + Number(pair.priceUsd || 0).toFixed(6);
+
+    document.getElementById("change").innerText =
+      (pair.priceChange?.h24 ?? 0) + "%";
+
+    document.getElementById("volume").innerText =
+      "$" + Math.round(pair.volume?.h24 ?? 0);
 
   } catch (e) {
     console.log("error loading data", e);
