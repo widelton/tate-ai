@@ -330,6 +330,17 @@ async function loadData() {
     document.getElementById("volume").innerText =
       "$" + Math.round(pair.volume?.h24 ?? 0);
 
+    document.getElementById("t-status").innerText = "STATUS: LIVE";
+
+document.getElementById("t-price").innerText =
+  "PRICE: $" + Number(pair.priceUsd || 0).toFixed(6);
+
+document.getElementById("t-change").innerText =
+  "24H: " + (pair.priceChange?.h24 ?? 0) + "%";
+
+document.getElementById("t-volume").innerText =
+  "VOLUME: $" + Math.round(pair.volume?.h24 ?? 0);
+
   } catch (e) {
     console.log("error loading data", e);
   }
