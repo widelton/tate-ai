@@ -150,9 +150,9 @@ TATE AI
 
   <p class="opacity-60 mb-2">LIVE SIGNAL</p>
 
-  <p>Price: <span class="text-cyan-300">$0.00012</span></p>
-  <p>24h: <span class="text-green-400">+8.3%</span></p>
-  <p>Volume: <span class="text-cyan-300">$120K</span></p>
+<p>Price: <span id="price" class="text-cyan-300">Loading...</span></p>
+<p>24h: <span id="change" class="text-green-400">Loading...</span></p>
+<p>Volume: <span id="volume" class="text-cyan-300">Loading...</span></p>
 
 </div>
 
@@ -296,6 +296,24 @@ function update() {
 }
 
 setInterval(draw,33);
+  <script>
+async function loadData() {
+  try {
+    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/35nKRCW9BZhkbmp2zhyZ428saV3X46M9UUUqSj1b6Lvt");
+    const data = await res.json();
+
+    const pair = data.pair;
+
+    document.getElementById("price").innerText = "$" + Number(pair.priceUsd).toFixed(6);
+    document.getElementById("change").innerText = pair.priceChange.h24 + "%";
+    document.getElementById("volume").innerText = "$" + Math.round(pair.volume.h24);
+    
+  } catch (e) {
+    console.log("error loading data");
+  }
+}
+
+loadData();
 </script>
 
 </body>
