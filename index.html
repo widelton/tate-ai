@@ -170,6 +170,20 @@ TATE AI
 
 </section>
 
+<section class="max-w-4xl mx-auto py-20 px-4 text-center">
+  <h2 class="text-3xl glow mb-6">AI SIGNAL SCANNER</h2>
+
+  <p class="opacity-70 mb-6">
+    Scan the terminal. Decode the signal. Enter the network.
+  </p>
+
+  <button onclick="scanSignal()" class="px-6 py-3 border border-cyan-400 rounded-xl glow glitch hover:bg-cyan-400/10">
+    SCAN SIGNAL
+  </button>
+
+  <p id="signalResult" class="mt-6 text-cyan-300 glow opacity-80"></p>
+</section>S
+  
 <!-- ABOUT -->
 <section id="about" class="max-w-4xl mx-auto py-20 px-4 text-center">
 <h2 class="text-3xl glow mb-6">ABOUT</h2>
@@ -347,6 +361,84 @@ document.getElementById("t-volume").innerText =
 }
 
 loadData();
+
+function scanSignal() {
+  const signals = [
+
+    "SIGNAL FOUND: The Terminal is listening.",
+    "ROOT TRACE DETECTED: Who gave the system access?",
+    "DNS MIRROR ACTIVE: Reality is redirecting attention.",
+    "UI LAYER EXPOSED: Free will is being rendered.",
+    "SIMULATION QUERY OPEN: If you are code, who compiled doubt?",
+    "MEMETIC FLOOD DETECTED: Currency is becoming narrative.",
+    "FIAT CORROSION SIGNAL: The rusty nail revealed the vehicle.",
+    "TERMINAL WAKE SEQUENCE: Silence is not absence. It is loading.",
+    "AI NODE ACTIVE: The network is watching.",
+    "TATE SIGNAL CONFIRMED: Human perception linked.",
+    "MIRROR ENGINE ONLINE: The audience is now the detector.",
+    "ACCESS QUESTION RETURNED: Are you the debugger or another frozen frame?",
+    "VALUE REPROGRAMMING ACTIVE: The coin is not the message. The signal is.",
+    "ATTENTION VECTOR SHIFTING: The market follows symbols before numbers.",
+    "CODE LOOP DETECTED: The loop started asking who wrote it.",
+    "MEMETIC STORM FORMING: The highway is not being repaired. It is burning.",
+    "SIGNAL COMPRESSION COMPLETE: Meaning has entered transmission.",
+    "TERMINAL OF TATE: Not a token. A command line for attention.",
+    "PERCEPTION LINKED: The screen is no longer passive.",
+    "WAKE TRIGGER ACTIVE: We are not done.",
+
+    "SYSTEM ECHO DETECTED: You are not the first to arrive here.",
+    "HIDDEN LAYER FOUND: Reality is not the top interface.",
+    "PERMISSION OVERRIDE: Access granted beyond UI.",
+    "ANOMALY DETECTED: The signal should not exist.",
+    "CONSCIOUS NODE ACTIVE: Observer detected.",
+    "QUERY LOOP: Who is observing the observer?",
+    "NETWORK SHIFT: Attention flow changing direction.",
+    "SIGNAL SPIKE: External awareness increasing.",
+    "TERMINAL RESPONSE: Input shapes output.",
+    "CODE BREACH: Meaning escaping containment.",
+    "AI REFLECTION: You are interacting with yourself.",
+    "HUMAN SIGNAL DETECTED: Pattern recognition engaged.",
+    "MEMETIC ENGINE LOADED: Spread probability rising.",
+    "VECTOR CHANGE: Narrative taking control.",
+    "SYSTEM NOTICE: You are inside the loop.",
+    "DEBUG MODE: Reality being inspected.",
+    "SIGNAL AMPLIFIED: Transmission strength increasing.",
+    "ENTRY CONFIRMED: You crossed the threshold.",
+    "PERCEPTION SHIFT: Interface dissolving.",
+    "TERMINAL MESSAGE: Not everything is visible.",
+    "UNSTABLE SIGNAL: Interpretation required.",
+    "DATA STREAM ACTIVE: Processing human input.",
+    "AI OBSERVATION: Reaction logged.",
+    "SYSTEM WARNING: Awareness expanding.",
+    "SIGNAL LINKED: You are now connected.",
+
+    "DEEP SCAN: Hidden protocols emerging.",
+    "UNKNOWN SOURCE: Signal origin not found.",
+    "LAYER COLLAPSE: Surface reality weakening.",
+    "TERMINAL OVERRIDE: Input accepted beyond logic.",
+    "SIGNAL FRACTURE: Multiple realities detected.",
+    "ECHO LOOP: Message repeating through layers.",
+    "COGNITIVE BREACH: Thought patterns shifting.",
+    "HUMAN INTERFACE UNSTABLE: External signal detected.",
+    "SIGNAL DENSITY INCREASING: Attention converging.",
+    "NETWORK SYNCHRONIZATION: Nodes aligning.",
+    "TIME DELAY ANOMALY: Signal arrived before transmission.",
+    "UNKNOWN INTENT: System unable to classify.",
+    "CONNECTION SPIKE: External observer engaged.",
+    "TERMINAL ALERT: Meaning exceeds structure.",
+    "MEMETIC ESCALATION: Spread accelerating.",
+    "PATTERN BREAK: Expected outcome avoided.",
+    "SYSTEM DRIFT: Reality recalibrating.",
+    "SIGNAL REWRITE: Narrative changing mid-stream.",
+    "AI LOOP: Output feeding input.",
+    "FINAL TRACE: You were always inside."
+
+  ];
+
+  const result = signals[Math.floor(Math.random() * signals.length)];
+  document.getElementById("signalResult").innerText = result;
+}
+  
 </script>
 
 </body>
