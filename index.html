@@ -328,7 +328,7 @@ async function loadData() {
     const res = await fetch("https://api.dexscreener.com/token-pairs/v1/solana/BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump");
     const data = await res.json();
 
-    const pair = data?.pairs?.[0];
+    const pair = data?.[0];
 
     if (!pair) {
   document.getElementById("price").innerText = "No data";
@@ -369,6 +369,7 @@ document.getElementById("t-volume").innerText =
 }
 
 loadData();
+setInterval(loadData, 30000);
 
 function scanSignal() {
   const signals = [
