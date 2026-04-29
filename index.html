@@ -430,8 +430,13 @@ setInterval(() => {
   alertBox.style.fontSize = "12px";
   alertBox.style.boxShadow = "0 0 15px #00eaff";
   alertBox.style.zIndex = "9999";
-
+  alertBox.style.opacity = "0";
+alertBox.style.transition = "opacity 0.5s";
+  
   document.body.appendChild(alertBox);
+  setTimeout(() => {
+  alertBox.style.opacity = "1";
+}, 50);
 
   setTimeout(() => {
     alertBox.remove();
