@@ -404,12 +404,9 @@ setInterval(() => {
 
   terminal.appendChild(line);
 
-if (terminal.children.length > 20) {
-  terminal.removeChild(terminal.children[2]);
-}
-  
-
-  terminal.scrollTop = terminal.scrollHeight;
+  while (terminal.children.length > 3) {
+    terminal.removeChild(terminal.children[0]);
+  }
 
 }, 2000);
   
