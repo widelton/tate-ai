@@ -540,9 +540,13 @@ addTerminalLine("PROCESSING...");
         addTerminalLine("CA: BoBj68...rpump");
       } 
       else if (command === "signal") {
-        const strength = Math.floor(Math.random() * 31) + 60;
-        addTerminalLine("SIGNAL LOCKED: " + strength + "%");
-      } 
+  const strength = Math.floor(Math.random() * 31) + 60;
+  const bars = Math.round(strength / 10);
+  const filled = "█".repeat(bars);
+  const empty = "░".repeat(10 - bars);
+
+  addTerminalLine("SIGNAL: " + filled + empty + " " + strength + "%");
+}
       else if (command === "clear") {
         document.getElementById("terminal-logs").innerHTML = "";
       } 
