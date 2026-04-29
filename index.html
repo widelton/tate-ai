@@ -336,8 +336,29 @@ DexTools Chart
 
 <script>
 // copy CA
+  function playBeep() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  oscillator.type = "sine";
+  oscillator.frequency.value = 720;
+
+  gainNode.gain.value = 0.03;
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  oscillator.start();
+
+  setTimeout(() => {
+    oscillator.stop();
+    audioCtx.close();
+  }, 80);
+}
 function copyCA() {
   navigator.clipboard.writeText("BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump");
+  playBeep();
   addTerminalLine("[COPIED TO MEMORY]");
 }
 
