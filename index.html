@@ -61,6 +61,20 @@ body::before {
   animation: glitch 0.3s infinite;
 }
 
+@keyframes screenGlitch {
+  0% { opacity: 1; }
+  20% { opacity: 0.6; }
+  40% { opacity: 1; }
+  60% { opacity: 0.5; }
+  80% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.glitch-screen {
+  animation: screenGlitch 0.3s;
+}
+  
+
 /* scanline */
 .scan::after {
   content:"";
@@ -498,6 +512,23 @@ setInterval(() => {
 
 }, 8000);
 
+
+setInterval(() => {
+  const chance = Math.random();
+
+  if (chance < 0.2) {
+
+    document.body.classList.add("glitch-screen");
+
+    setTimeout(() => {
+      document.body.classList.remove("glitch-screen");
+    }, 300);
+
+    addTerminalLine("[ERROR: SIGNAL INTERFERENCE]");
+  }
+
+}, 7000);
+  
 
 function addTerminalLine(text) {
   const logs = document.getElementById("terminal-logs");
