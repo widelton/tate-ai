@@ -412,12 +412,31 @@ setInterval(() => {
 }, 2000);
 
 
-// BUY ALERTS 
+// TERMINAL ACTIVITY ALERTS
 setInterval(() => {
-  const amount = (Math.random() * 3 + 0.2).toFixed(2);
+  const names = [
+    "NODE_483",
+    "WALLET_91X",
+    "SIGNAL_77",
+    "AGENT_204",
+    "SCAN_808",
+    "MIRROR_12"
+  ];
+
+  const actions = [
+    "joined the signal",
+    "triggered scanner pulse",
+    "entered terminal range",
+    "amplified network activity",
+    "synced with the terminal",
+    "detected memetic movement"
+  ];
+
+  const name = names[Math.floor(Math.random() * names.length)];
+  const action = actions[Math.floor(Math.random() * actions.length)];
 
   const alertBox = document.createElement("div");
-  alertBox.innerText = `Buy detected: ${amount} SOL`;
+  alertBox.innerText = `${name} ${action}`;
 
   alertBox.style.position = "fixed";
   alertBox.style.bottom = "20px";
@@ -431,16 +450,22 @@ setInterval(() => {
   alertBox.style.boxShadow = "0 0 15px #00eaff";
   alertBox.style.zIndex = "9999";
   alertBox.style.opacity = "0";
-alertBox.style.transition = "opacity 0.5s";
-  
+  alertBox.style.transition = "opacity 0.5s";
+
   document.body.appendChild(alertBox);
-  setTimeout(() => {
-  alertBox.style.opacity = "1";
-}, 50);
 
   setTimeout(() => {
-    alertBox.remove();
-  }, 3000);
+    alertBox.style.opacity = "1";
+  }, 50);
+
+  setTimeout(() => {
+    alertBox.style.opacity = "0";
+
+    setTimeout(() => {
+      alertBox.remove();
+    }, 500);
+
+  }, 2500);
 
 }, 8000);
 
