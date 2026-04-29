@@ -336,15 +336,24 @@ DexTools Chart
 
 <script>
 // copy CA
-  function playBeep() {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let audioCtx;
+
+function playBeep() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+
   const oscillator = audioCtx.createOscillator();
   const gainNode = audioCtx.createGain();
 
-  oscillator.type = "sine";
-  oscillator.frequency.value = 720;
+  oscillator.type = "square";
+  oscillator.frequency.value = 880;
 
-  gainNode.gain.value = 0.03;
+  gainNode.gain.value = 0.12;
 
   oscillator.connect(gainNode);
   gainNode.connect(audioCtx.destination);
@@ -353,8 +362,7 @@ DexTools Chart
 
   setTimeout(() => {
     oscillator.stop();
-    audioCtx.close();
-  }, 80);
+  }, 100);
 }
 function copyCA() {
   navigator.clipboard.writeText("BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump");
