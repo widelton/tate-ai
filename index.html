@@ -82,6 +82,31 @@ canvas {
   left:0;
   z-index:-1;
 }
+
+.terminal-input {
+  margin-top: 10px;
+  border-top: 1px solid rgba(0,255,255,0.2);
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.terminal-input span {
+  color: #00eaff;
+}
+
+.terminal-input input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #00eaff;
+  font-family: monospace;
+  font-size: 12px;
+  width: 100%;
+}
+
+  
 </style>
 </head>
 
@@ -166,6 +191,10 @@ TATE AI
   <div id="t-volume">VOLUME: --</div>
 
   <div id="terminal-logs" class="mt-2 border-t border-cyan-400/20 pt-2 h-16 overflow-hidden"></div>
+  <div class="terminal-input">
+  <span>&gt;</span>
+  <input id="terminalInput" type="text" placeholder="type help..." autocomplete="off">
+ </div>
 
 </div>
 
@@ -468,6 +497,59 @@ setInterval(() => {
   }, 2500);
 
 }, 8000);
+
+
+function addTerminalLine(text) {
+  const logs = document.getElementById("terminal-logs");
+
+  const line = document.createElement("div");
+  line.innerText = text;
+
+  logs.appendChild(line);
+
+  while (logs.children.length > 3) {
+    logs.removeChild(logs.children[0]);
+  }
+}
+
+const terminalInput = document.getElementById("terminalInput");
+
+terminalInput.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    const command = terminalInput.value.trim().toLowerCase();
+
+    if (command === "") return;
+
+    addTerminalLine("> " + command);
+    terminalInput.value = "";
+
+    setTimeout(() => {
+      if (command === "help") {
+        addTerminalLine("COMMANDS: status / price / contract / signal / clear");
+      } 
+      else if (command === "status") {
+        addTerminalLine("STATUS: TERMINAL ONLINE");
+      } 
+      else if (command === "price") {
+        addTerminalLine(document.getElementById("t-price").innerText);
+      } 
+      else if (command === "contract") {
+        addTerminalLine("CA: BoBj68...rpump");
+      } 
+      else if (command === "signal") {
+        const strength = Math.floor(Math.random() * 31) + 60;
+        addTerminalLine("SIGNAL LOCKED: " + strength + "%");
+      } 
+      else if (command === "clear") {
+        document.getElementById("terminal-logs").innerHTML = "";
+      } 
+      else {
+        addTerminalLine("UNKNOWN COMMAND. TYPE: help");
+      }
+    }, 700);
+  }
+});
+  
 
 
 function scanSignal() {
