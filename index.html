@@ -410,7 +410,35 @@ setInterval(() => {
   }
 
 }, 2000);
-  
+
+
+// BUY ALERTS 
+setInterval(() => {
+  const amount = (Math.random() * 3 + 0.2).toFixed(2);
+
+  const alertBox = document.createElement("div");
+  alertBox.innerText = `Buy detected: ${amount} SOL`;
+
+  alertBox.style.position = "fixed";
+  alertBox.style.bottom = "20px";
+  alertBox.style.right = "20px";
+  alertBox.style.background = "rgba(0,0,0,0.8)";
+  alertBox.style.border = "1px solid #00eaff";
+  alertBox.style.padding = "10px 14px";
+  alertBox.style.borderRadius = "10px";
+  alertBox.style.color = "#00eaff";
+  alertBox.style.fontSize = "12px";
+  alertBox.style.boxShadow = "0 0 15px #00eaff";
+  alertBox.style.zIndex = "9999";
+
+  document.body.appendChild(alertBox);
+
+  setTimeout(() => {
+    alertBox.remove();
+  }, 3000);
+
+}, 8000);
+
 
 function scanSignal() {
   const signals = [
