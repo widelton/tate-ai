@@ -325,7 +325,7 @@ setInterval(draw,33);
  
 async function loadData() {
   try {
-    const res = await fetch("https://api.dexscreener.com/latest/dex/pairs/solana/35nKRCW9BZhkbmp2zhyZ428saV3X46M9UUUqSj1b6Lvt");
+    const res = await fetch("https://api.dexscreener.com/token-pairs/v1/solana/BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump");
     const data = await res.json();
 
     const pair = data?.pairs?.[0];
