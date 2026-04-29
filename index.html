@@ -331,9 +331,17 @@ async function loadData() {
     const pair = data?.pairs?.[0];
 
     if (!pair) {
-      console.log("No pair data yet");
-      return;
-    }
+  document.getElementById("price").innerText = "No data";
+  document.getElementById("change").innerText = "No data";
+  document.getElementById("volume").innerText = "No data";
+
+  document.getElementById("t-status").innerText = "STATUS: NO DATA";
+  document.getElementById("t-price").innerText = "PRICE: --";
+  document.getElementById("t-change").innerText = "24H: --";
+  document.getElementById("t-volume").innerText = "VOLUME: --";
+
+  return;
+}
 
     document.getElementById("price").innerText =
       "$" + Number(pair.priceUsd || 0).toFixed(6);
