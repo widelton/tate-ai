@@ -524,6 +524,9 @@ terminalInput.addEventListener("keydown", function(e) {
     terminalInput.value = "";
 
     setTimeout(() => {
+
+addTerminalLine("PROCESSING...");
+      
       if (command === "help") {
         addTerminalLine("COMMANDS: status / price / contract / signal / clear");
       } 
