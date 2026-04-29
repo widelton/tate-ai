@@ -166,6 +166,8 @@ TATE AI
   <div id="t-change">24H: --</div>
   <div id="t-volume">VOLUME: --</div>
 
+  <div id="terminal-logs" class="mt-2 border-t border-cyan-400/20 pt-2"></div>
+
 </div>
 
 </section>
@@ -397,15 +399,15 @@ setInterval(() => {
     "> terminal active..."
   ];
 
-  const terminal = document.getElementById("terminal");
+  const logs = document.getElementById("terminal-logs");
 
   const line = document.createElement("div");
   line.innerText = lines[Math.floor(Math.random() * lines.length)];
 
-  terminal.appendChild(line);
+  logs.appendChild(line);
 
-  while (terminal.children.length > 3) {
-    terminal.removeChild(terminal.children[0]);
+  while (logs.children.length > 3) {
+    logs.removeChild(logs.children[0]);
   }
 
 }, 2000);
