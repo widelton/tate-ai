@@ -386,6 +386,29 @@ document.getElementById("t-volume").innerText =
 loadData();
 setInterval(loadData, 30000);
 
+setInterval(() => {
+  const lines = [
+    "> scanning liquidity...",
+    "> signal detected...",
+    "> syncing node...",
+    "> analyzing volume...",
+    "> connecting to network...",
+    "> decoding signal...",
+    "> terminal active..."
+  ];
+
+  const terminal = document.getElementById("terminal");
+
+  const line = document.createElement("div");
+  line.innerText = lines[Math.floor(Math.random() * lines.length)];
+
+  terminal.appendChild(line);
+
+  terminal.scrollTop = terminal.scrollHeight;
+
+}, 2000);
+  
+
 function scanSignal() {
   const signals = [
 
