@@ -369,7 +369,7 @@ function playBeep() {
 function copyCA() {
   navigator.clipboard.writeText("BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump");
   playBeep();
-  addTerminalLine("[COPIED TO MEMORY]");
+  typeLine("[COPIED TO MEMORY]");
 }
 document.addEventListener("click", () => {
   if (!audioCtx) {
@@ -563,23 +563,33 @@ setInterval(() => {
       document.body.classList.remove("glitch-screen");
     }, 300);
 
-    addTerminalLine("[ERROR: SIGNAL INTERFERENCE]");
+    typeLine("[ERROR: SIGNAL INTERFERENCE]");
   }
 
 }, 7000);
   
 
-function addTerminalLine(text) {
+function typeLine(text) {
   const logs = document.getElementById("terminal-logs");
 
   const line = document.createElement("div");
-  line.innerText = text;
-
   logs.appendChild(line);
 
-  while (logs.children.length > 3) {
-    logs.removeChild(logs.children[0]);
+  let i = 0;
+
+  function typing() {
+    if (i < text.length) {
+      line.innerText += text.charAt(i);
+      i++;
+      setTimeout(typing, 20);
+    } else {
+      while (logs.children.length > 3) {
+        logs.removeChild(logs.children[0]);
+      }
+    }
   }
+
+  typing();
 }
 
 const terminalInput = document.getElementById("terminalInput");
@@ -591,24 +601,24 @@ terminalInput.addEventListener("keydown", function(e) {
    if (command === "") return;
     
 playBeep();
-    addTerminalLine("> " + command);
+    typeLine("> " + command);
     terminalInput.value = "";
 
     setTimeout(() => {
 
-addTerminalLine("PROCESSING...");
+typeLine("PROCESSING...");
       
       if (command === "help") {
-        addTerminalLine("COMMANDS: status / price / contract / signal / clear");
+        typeLine("COMMANDS: status / price / contract / signal / clear");
       } 
       else if (command === "status") {
-        addTerminalLine("STATUS: TERMINAL ONLINE");
+        typeLine("STATUS: TERMINAL ONLINE");
       } 
       else if (command === "price") {
-        addTerminalLine(document.getElementById("t-price").innerText);
+        typeLine(document.getElementById("t-price").innerText);
       } 
       else if (command === "contract") {
-        addTerminalLine("CA: BoBj68...rpump");
+        typeLine("CA: BoBj68...rpump");
       } 
       else if (command === "signal") {
   const strength = Math.floor(Math.random() * 31) + 60;
@@ -616,13 +626,13 @@ addTerminalLine("PROCESSING...");
   const filled = "█".repeat(bars);
   const empty = "░".repeat(10 - bars);
 
-  addTerminalLine("SIGNAL: " + filled + empty + " " + strength + "%");
+  typeLine("SIGNAL: " + filled + empty + " " + strength + "%");
 }
       else if (command === "clear") {
         document.getElementById("terminal-logs").innerHTML = "";
       } 
       else {
-        addTerminalLine("UNKNOWN COMMAND. TYPE: help");
+        typeLine("UNKNOWN COMMAND. TYPE: help");
       }
     }, 700);
   }
