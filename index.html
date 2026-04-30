@@ -40,8 +40,21 @@ body::before {
 
 /* hologram */
 @keyframes float {
-  0%,100% { transform: translateY(0) rotate(0deg);}
-  50% { transform: translateY(-20px) rotate(2deg);}
+  0%,100% {
+    transform:
+      translate3d(var(--mx, 0px), calc(var(--my, 0px) + 0px), 0)
+      rotateY(var(--ry, 0deg))
+      rotateX(var(--rx, 0deg))
+      rotate(0deg);
+  }
+
+  50% {
+    transform:
+      translate3d(var(--mx, 0px), calc(var(--my, 0px) - 20px), 0)
+      rotateY(var(--ry, 0deg))
+      rotateX(var(--rx, 0deg))
+      rotate(2deg);
+  }
 }
 .hologram {
   animation: float 6s ease-in-out infinite;
@@ -50,8 +63,9 @@ body::before {
 }
 
 .robot-live {
-  transition: transform 0.15s ease, filter 0.3s ease;
+  transition: filter 0.3s ease;
   transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .robot-live:hover {
@@ -647,7 +661,27 @@ typeLine("PROCESSING...");
   }
 });
   
+document.addEventListener("mousemove", function(e) {
+  const heroRobot = document.getElementById("heroRobot");
+  const holoRobot = document.getElementById("holoRobot");
 
+  const x = (e.clientX / window.innerWidth - 0.5) * 30;
+  const y = (e.clientY / window.innerHeight - 0.5) * 30;
+
+  if (heroRobot) {
+    heroRobot.style.setProperty("--mx", x + "px");
+    heroRobot.style.setProperty("--my", y + "px");
+    heroRobot.style.setProperty("--ry", x / 2 + "deg");
+    heroRobot.style.setProperty("--rx", -y / 2 + "deg");
+  }
+
+  if (holoRobot) {
+    holoRobot.style.setProperty("--mx", x / 2 + "px");
+    holoRobot.style.setProperty("--my", y / 2 + "px");
+    holoRobot.style.setProperty("--ry", x / 4 + "deg");
+    holoRobot.style.setProperty("--rx", -y / 4 + "deg");
+  }
+});
 
 function scanSignal() {
   const signals = [
