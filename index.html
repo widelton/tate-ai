@@ -665,21 +665,24 @@ document.addEventListener("mousemove", function(e) {
   const heroRobot = document.getElementById("heroRobot");
   const holoRobot = document.getElementById("holoRobot");
 
-  const x = (e.clientX / window.innerWidth - 0.5) * 30;
-  const y = (e.clientY / window.innerHeight - 0.5) * 30;
+const centerX = window.innerWidth / 2;
+const centerY = window.innerHeight / 2;
+
+const x = (e.clientX - centerX) / centerX;
+const y = (e.clientY - centerY) / centerY;
 
   if (heroRobot) {
-    heroRobot.style.setProperty("--mx", x + "px");
-    heroRobot.style.setProperty("--my", y + "px");
-    heroRobot.style.setProperty("--ry", x / 2 + "deg");
-    heroRobot.style.setProperty("--rx", -y / 2 + "deg");
+    heroRobot.style.setProperty("--mx", x * 25 + "px");
+    heroRobot.style.setProperty("--my", y * 25 + "px");
+    heroRobot.style.setProperty("--ry", x * 10 + "deg");
+    heroRobot.style.setProperty("--rx", -y * 10 + "deg");
   }
 
   if (holoRobot) {
-    holoRobot.style.setProperty("--mx", x / 2 + "px");
-    holoRobot.style.setProperty("--my", y / 2 + "px");
-    holoRobot.style.setProperty("--ry", x / 4 + "deg");
-    holoRobot.style.setProperty("--rx", -y / 4 + "deg");
+    holoRobot.style.setProperty("--mx", x * 12 + "px");
+    holoRobot.style.setProperty("--my", y * 12 + "px");
+    holoRobot.style.setProperty("--ry", x * 5 + "deg");
+    holoRobot.style.setProperty("--rx", -y * 5 + "deg");
   }
 });
 
