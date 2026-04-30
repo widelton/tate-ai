@@ -49,6 +49,16 @@ body::before {
   opacity: 0.95;
 }
 
+.robot-live {
+  transition: transform 0.15s ease, filter 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.robot-live:hover {
+  filter: brightness(1.2) drop-shadow(0 0 50px #00eaff);
+}
+  
+
 /* glitch */
 @keyframes glitch {
   0% {transform:translate(0)}
