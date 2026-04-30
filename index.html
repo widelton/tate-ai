@@ -661,30 +661,45 @@ typeLine("PROCESSING...");
   }
 });
   
+let targetX = 0;
+let targetY = 0;
+
+let currentX = 0;
+let currentY = 0;
+
 document.addEventListener("mousemove", function(e) {
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+
+  targetX = (e.clientX - centerX) / centerX;
+  targetY = (e.clientY - centerY) / centerY;
+});
+
+function animateRobot() {
   const heroRobot = document.getElementById("heroRobot");
   const holoRobot = document.getElementById("holoRobot");
 
-const centerX = window.innerWidth / 2;
-const centerY = window.innerHeight / 2;
-
-const x = (e.clientX - centerX) / centerX;
-const y = (e.clientY - centerY) / centerY;
+  currentX += (targetX - currentX) * 0.08;
+  currentY += (targetY - currentY) * 0.08;
 
   if (heroRobot) {
-    heroRobot.style.setProperty("--mx", x * 25 + "px");
-    heroRobot.style.setProperty("--my", y * 25 + "px");
-    heroRobot.style.setProperty("--ry", x * 10 + "deg");
-    heroRobot.style.setProperty("--rx", -y * 10 + "deg");
+    heroRobot.style.setProperty("--mx", currentX * 25 + "px");
+    heroRobot.style.setProperty("--my", currentY * 25 + "px");
+    heroRobot.style.setProperty("--ry", currentX * 10 + "deg");
+    heroRobot.style.setProperty("--rx", -currentY * 10 + "deg");
   }
 
   if (holoRobot) {
-    holoRobot.style.setProperty("--mx", x * 12 + "px");
-    holoRobot.style.setProperty("--my", y * 12 + "px");
-    holoRobot.style.setProperty("--ry", x * 5 + "deg");
-    holoRobot.style.setProperty("--rx", -y * 5 + "deg");
+    holoRobot.style.setProperty("--mx", currentX * 12 + "px");
+    holoRobot.style.setProperty("--my", currentY * 12 + "px");
+    holoRobot.style.setProperty("--ry", currentX * 5 + "deg");
+    holoRobot.style.setProperty("--rx", -currentY * 5 + "deg");
   }
-});
+
+  requestAnimationFrame(animateRobot);
+}
+
+animateRobot();
 
 function scanSignal() {
   const signals = [
