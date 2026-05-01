@@ -196,6 +196,7 @@ TATE AI
 <div class="flex flex-wrap gap-4 justify-center">
 <a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump"
    target="_blank"
+   onclick="buySignal()"
    class="px-6 py-3 border border-cyan-400 rounded-xl glow glitch">
    Buy $TATE
 </a>
@@ -774,6 +775,12 @@ function scanSignal() {
   playBeep();
 typeLine("[SCAN COMPLETE]");
 typeLine(result);
+}
+
+  function buySignal() {
+  playBeep();
+  typeLine("[BUY SIGNAL INITIATED]");
+  typeLine("> redirecting to market...");
 }
   
 </script>
