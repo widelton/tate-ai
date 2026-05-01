@@ -374,6 +374,24 @@ const systemState = {
 function updateState(key, value) {
   systemState[key] = value;
 }
+
+  function behaviorCheck() {
+  if (systemState.scans >= 3 && systemState.lastAction === "SCAN") {
+    typeLine("[PATTERN LOCK]");
+    typeLine("> repeated scanning detected...");
+    typeLine("> signal focus increasing...");
+  }
+
+  if (systemState.buys >= 1 && systemState.lastAction === "BUY") {
+    typeLine("[MARKET INTENT]");
+    typeLine("> transaction path activated...");
+  }
+
+  if (systemState.lastAction === "VIEW_CHART") {
+    typeLine("[MARKET FOCUS]");
+    typeLine("> user is observing price structure...");
+  }
+}
   
   let audioCtx;
 
@@ -794,6 +812,9 @@ systemState.scans++;
   
 typeLine("[SCAN COMPLETE]");
 typeLine(result);
+
+  behaviorCheck();
+  
 }
 
   function buySignal() {
@@ -802,8 +823,11 @@ typeLine(result);
 updateState("lastAction", "BUY");
 systemState.buys++;
     
-  typeLine("[BUY SIGNAL INITIATED]");
-  typeLine("> redirecting to market...");
+typeLine("[BUY SIGNAL INITIATED]");
+typeLine("> redirecting to market...");
+
+behaviorCheck();
+    
 }
 
 let idleTimer;
@@ -830,6 +854,8 @@ resetIdleTimer();
 
   typeLine("[CHART ACCESS]");
   typeLine("> loading market interface...");
+
+  behaviorCheck();
 }
 
 </script>
