@@ -517,32 +517,6 @@ setInterval(loadData, 30000);
   typeLine("> initializing session...");
   typeLine("> waiting for input...");
 }, 3000);
-  
-setTimeout(() => {
-setInterval(() => {
-  const lines = [
-    "> scanning liquidity...",
-    "> signal detected...",
-    "> syncing node...",
-    "> analyzing volume...",
-    "> connecting to network...",
-    "> decoding signal...",
-    "> terminal active..."
-  ];
-
-  const logs = document.getElementById("terminal-logs");
-
-  const line = document.createElement("div");
-  line.innerText = lines[Math.floor(Math.random() * lines.length)];
-
-  logs.appendChild(line);
-
-  while (logs.children.length > 3) {
-    logs.removeChild(logs.children[0]);
-  }
-
-}, 2000);
-}, 6000);
 
 
 // TERMINAL ACTIVITY ALERTS
