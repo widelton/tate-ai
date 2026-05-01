@@ -845,10 +845,23 @@ let idleTimer;
 function resetIdleTimer() {
   clearTimeout(idleTimer);
 
+  updateState("userActive", true);
+
   idleTimer = setTimeout(() => {
+
+ 
+    updateState("userActive", false);
+
+
+    systemState.idleCount++;
+
     typeLine("[IDLE DETECTED]");
     typeLine("> no input detected...");
     typeLine("> awaiting command...");
+
+    
+    behaviorCheck();
+
   }, 8000);
 }
 
