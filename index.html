@@ -794,7 +794,24 @@ typeLine(result);
   typeLine("[BUY SIGNAL INITIATED]");
   typeLine("> redirecting to market...");
 }
-  
+
+let idleTimer;
+
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+
+  idleTimer = setTimeout(() => {
+    typeLine("[IDLE DETECTED]");
+    typeLine("> no input detected...");
+    typeLine("> awaiting command...");
+  }, 8000);
+}
+
+document.addEventListener("mousemove", resetIdleTimer);
+document.addEventListener("keydown", resetIdleTimer);
+
+resetIdleTimer();
+
 </script>
 
 </body>
