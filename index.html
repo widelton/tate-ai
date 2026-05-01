@@ -357,6 +357,23 @@ TATE AI
 
 <script>
 // copy CA
+
+const systemState = {
+  status: "BOOTING",
+  userActive: false,
+  lastCommand: null,
+  lastAction: null,
+  scans: 0,
+  copies: 0,
+  buys: 0,
+  idleCount: 0,
+  signalStrength: 0
+};
+
+function updateState(key, value) {
+  systemState[key] = value;
+}
+  
   let audioCtx;
 
 function playBeep() {
