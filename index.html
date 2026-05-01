@@ -771,6 +771,9 @@ function scanSignal() {
 
   const result = signals[Math.floor(Math.random() * signals.length)];
   document.getElementById("signalResult").innerText = result;
+  playBeep();
+typeLine("[SCAN COMPLETE]");
+typeLine(result);
 }
   
 </script>
