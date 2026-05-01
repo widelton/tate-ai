@@ -491,6 +491,12 @@ document.getElementById("t-volume").innerText =
 
 loadData();
 setInterval(loadData, 30000);
+  
+  setTimeout(() => {
+  typeLine("[USER DETECTED]");
+  typeLine("> initializing session...");
+  typeLine("> waiting for input...");
+}, 3000);
 
 setInterval(() => {
   const lines = [
