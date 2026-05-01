@@ -671,6 +671,14 @@ typeLine("PROCESSING...");
       else if (command === "contract") {
         typeLine("CA: BoBj68...rpump");
       } 
+
+     else if (command === "state") {
+        typeLine("SCANS: " + systemState.scans);
+        typeLine("BUYS: " + systemState.buys);
+        typeLine("COPIES: " + systemState.copies);
+        typeLine("LAST: " + (systemState.lastAction || "NONE"));
+      }
+  
       else if (command === "signal") {
   const strength = Math.floor(Math.random() * 31) + 60;
   const bars = Math.round(strength / 10);
