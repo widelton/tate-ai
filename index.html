@@ -202,6 +202,7 @@ TATE AI
 </a>
 
 <a href="#chart"
+   onclick="viewChartSignal()"
    class="px-6 py-3 border border-cyan-400 rounded-xl glow glitch">
    View Live Chart
 </a>
@@ -821,6 +822,15 @@ document.addEventListener("mousemove", resetIdleTimer);
 document.addEventListener("keydown", resetIdleTimer);
 
 resetIdleTimer();
+
+  function viewChartSignal() {
+  playBeep();
+
+  updateState("lastAction", "VIEW_CHART");
+
+  typeLine("[CHART ACCESS]");
+  typeLine("> loading market interface...");
+}
 
 </script>
 
