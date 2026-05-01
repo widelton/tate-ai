@@ -401,6 +401,17 @@ function updateState(key, value) {
     typeLine("[MARKET FOCUS]");
     typeLine("> user is observing price structure...");
   }
+
+if (systemState.idleCount >= 2 && !systemState.userActive) {
+  typeLine("[SYSTEM WATCHING]");
+  typeLine("> inactivity detected...");
+}
+
+if (systemState.idleCount >= 4 && !systemState.userActive) {
+  typeLine("[ATTENTION REQUIRED]");
+  typeLine("> user drift increasing...");
+}
+    
 }
   
   let audioCtx;
