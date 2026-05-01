@@ -870,6 +870,8 @@ function resetIdleTimer() {
 
   updateState("userActive", true);
 
+  systemState.idleStage = 0;
+
   idleTimer = setTimeout(() => {
 
  
