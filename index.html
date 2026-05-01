@@ -387,8 +387,12 @@ function playBeep() {
 }
 function copyCA() {
   navigator.clipboard.writeText("BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump");
+
   playBeep();
-  typeLine("[COPIED TO MEMORY]");
+
+  typeLine("[CONTRACT COPIED]");
+  typeLine("> memory buffer updated");
+  typeLine("> ready for transaction");
 }
 document.addEventListener("click", () => {
   if (!audioCtx) {
