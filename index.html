@@ -379,6 +379,8 @@ const systemState = {
   buys: 0,
   idleCount: 0,
   signalStrength: 0
+  idleStage: 0
+    
 };
 
 function updateState(key, value) {
@@ -402,14 +404,22 @@ function updateState(key, value) {
     typeLine("> user is observing price structure...");
   }
 
-if (systemState.idleCount >= 2 && !systemState.userActive) {
-  typeLine("[SYSTEM WATCHING]");
-  typeLine("> inactivity detected...");
-}
+if (!systemState.userActive) {
 
-if (systemState.idleCount >= 4 && !systemState.userActive) {
-  typeLine("[ATTENTION REQUIRED]");
-  typeLine("> user drift increasing...");
+  if (systemState.idleCount >= 2 && systemState.idleStage < 1) {
+    systemState.idleStage = 1;
+
+    typeLine("[SYSTEM WATCHING]");
+    typeLine("> inactivity detected...");
+  }
+
+  if (systemState.idleCount >= 4 && systemState.idleStage < 2) {
+    systemState.idleStage = 2;
+
+    typeLine("[ATTENTION REQUIRED]");
+    typeLine("> user drift increasing...");
+  }
+
 }
     
 }
