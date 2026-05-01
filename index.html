@@ -407,6 +407,9 @@ function copyCA() {
 
   playBeep();
 
+  updateState("lastAction", "COPY");
+systemState.copies++;
+
   typeLine("[CONTRACT COPIED]");
   typeLine("> memory buffer updated");
   typeLine("> ready for transaction");
@@ -802,12 +805,20 @@ function scanSignal() {
   const result = signals[Math.floor(Math.random() * signals.length)];
   document.getElementById("signalResult").innerText = result;
   playBeep();
+
+updateState("lastAction", "SCAN");
+systemState.scans++;
+  
 typeLine("[SCAN COMPLETE]");
 typeLine(result);
 }
 
   function buySignal() {
   playBeep();
+    
+updateState("lastAction", "BUY");
+systemState.buys++;
+    
   typeLine("[BUY SIGNAL INITIATED]");
   typeLine("> redirecting to market...");
 }
