@@ -144,6 +144,16 @@ canvas {
   width: 100%;
 }
 
+  #terminal-logs {
+  line-height: 1.8;
+  letter-spacing: 0.4px;
+  white-space: pre-wrap;
+}
+
+#terminal-logs div {
+  margin-bottom: 6px;
+}
+
   
 </style>
 </head>
@@ -228,7 +238,7 @@ TATE AI
   <div id="t-change">24H: --</div>
   <div id="t-volume">VOLUME: --</div>
 
-  <div id="terminal-logs" class="mt-2 border-t border-cyan-400/20 pt-2 h-16 overflow-hidden"></div>
+  <div id="terminal-logs" class="mt-3 border-t border-cyan-400/20 pt-3 h-28 overflow-hidden"></div>
   <div class="terminal-input">
   <span>&gt;</span>
   <input id="terminalInput" type="text" placeholder="type help..." autocomplete="off">
