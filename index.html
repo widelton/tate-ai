@@ -497,7 +497,8 @@ setInterval(loadData, 30000);
   typeLine("> initializing session...");
   typeLine("> waiting for input...");
 }, 3000);
-
+  
+setTimeout(() => {
 setInterval(() => {
   const lines = [
     "> scanning liquidity...",
@@ -521,6 +522,7 @@ setInterval(() => {
   }
 
 }, 2000);
+}, 6000);
 
 
 // TERMINAL ACTIVITY ALERTS
