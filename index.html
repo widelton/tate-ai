@@ -29,7 +29,20 @@ body::before {
 
 /* glow */
 .glow {
-  text-shadow:0 0 10px #00eaff,0 0 20px #00eaff,0 0 40px #00eaff;
+  text-shadow:
+    0 0 6px rgba(0, 234, 255, 0.9),
+    0 0 18px rgba(0, 234, 255, 0.65),
+    0 0 38px rgba(0, 234, 255, 0.35);
+}
+
+.hero-title {
+  letter-spacing: 0.12em;
+  background: linear-gradient(180deg, #ffffff 0%, #00eaff 45%, #006b7a 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow:
+    0 0 12px rgba(0, 234, 255, 0.8),
+    0 0 40px rgba(0, 234, 255, 0.35);
 }
 
 /* glass */
@@ -185,7 +198,7 @@ canvas {
 <section class="min-h-screen flex flex-col items-center text-center px-4 pt-32 pb-20 scan">
 
 <img id="heroRobot" src="Terminal_AI-removebg-preview.png" class="w-[280px] md:w-[480px] lg:w-[600px] hologram robot-live mb-6">
-<h1 class="text-5xl md:text-7xl font-bold glow mb-4">
+<h1 class="text-5xl md:text-7xl font-black glow hero-title mb-4">
 TATE AI
 </h1>
 
