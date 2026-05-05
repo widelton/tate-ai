@@ -71,11 +71,6 @@ body::before {
 }
 .hologram {
   animation: float 6s ease-in-out infinite;
-  filter:
-    drop-shadow(0 0 25px rgba(0, 234, 255, 0.7))
-    drop-shadow(0 0 60px rgba(0, 234, 255, 0.25));
-  opacity: 0.92;
-  mix-blend-mode: screen;
 }
 
 .hologram::after {
@@ -242,20 +237,24 @@ body::before {
   justify-content: center;
   align-items: center;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 .hero-robot-wrap img {
-  width: min(760px, 86vw);
-  opacity: 0.55;
+  display: block;
+  position: relative;
+  width: min(860px, 90vw);
+  max-width: none;
+  opacity: 1;
   object-fit: contain;
   mix-blend-mode: normal;
+  z-index: 2;
 
   filter:
-    brightness(1.18)
-    contrast(1.12)
-    drop-shadow(0 0 28px rgba(108,255,58,0.65))
-    drop-shadow(0 0 80px rgba(108,255,58,0.28));
+    brightness(1.2)
+    contrast(1.15)
+    drop-shadow(0 0 30px rgba(108,255,58,0.8))
+    drop-shadow(0 0 90px rgba(108,255,58,0.35));
 }
 
 /* hologram light under robot */
@@ -277,7 +276,7 @@ body::before {
 /* content above robot */
 .hero-content {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
