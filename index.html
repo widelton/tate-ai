@@ -224,13 +224,20 @@ body::before {
 }
 
 /* new hero area */
-.new-hero {
+.new-hero {.new-hero {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  padding: 90px 18px 60px;
+  padding: 0 18px 60px;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(0,0,0,0.65)),
+    url("tate-ai-hologram-robot.png");
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
-
+           
 /* robot background position */
 .hero-robot-wrap {
   position: absolute;
@@ -267,24 +274,25 @@ body::before {
 .hero-content {
   position: relative;
   z-index: 3;
-  min-height: calc(100vh - 150px);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-bottom: 40px;
 }
-
+           
 /* main terminal panel */
 .main-terminal-panel {
   width: min(780px, 94vw);
-  margin-top: 300px;
+  margin-top: 0;
   border: 1px solid rgba(108,255,58,0.45);
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)),
-    radial-gradient(circle at top, rgba(108,255,58,0.16), transparent 45%);
+    linear-gradient(180deg, rgba(0,0,0,0.76), rgba(0,0,0,0.88)),
+    radial-gradient(circle at top, rgba(108,255,58,0.10), transparent 45%);
   box-shadow:
     0 0 22px rgba(108,255,58,0.28),
-    inset 0 0 22px rgba(108,255,58,0.12);
+    inset 0 0 22px rgba(108,255,58,0.08);
   backdrop-filter: blur(14px);
   border-radius: 22px;
   padding: 22px;
@@ -297,8 +305,19 @@ body::before {
 }
 
 @media (max-width: 768px) {
+  .new-hero {
+    background-position: center top;
+    background-size: cover;
+    background-attachment: scroll;
+  }
+
+  .hero-content {
+    justify-content: flex-end;
+    padding-bottom: 20px;
+  }
+
   .main-terminal-panel {
-    margin-top: 260px;
+    margin-top: 0;
   }
 
   .terminal-grid {
@@ -439,25 +458,7 @@ footer {
 <!-- NEW HERO -->
 <section class="new-hero scan">
 
-  <div class="holo-base"></div>
-
-  <div class="hero-robot-wrap">
-    <img id="heroRobot" src="tate-ai-hologram-robot.png" class="hologram robot-live">
-  </div>
-
-  <div class="hero-content text-center">
-
-    <div class="mb-5 glow text-sm tracking-[0.45em] opacity-80">
-      TATEAI TERMINAL
-    </div>
-
-    <h1 class="text-5xl md:text-7xl font-black hero-title mb-4">
-      TATE AI TERMINAL
-    </h1>
-
-    <p class="text-sm md:text-base tracking-[0.22em] opacity-80 mb-8">
-      DECENTRALIZED INTELLIGENCE. MARKET DOMINANCE. ABSOLUTE FREEDOM.
-    </p>
+ <div class="hero-content text-center">
 
     <!-- MAIN TERMINAL PANEL -->
     <div id="terminal" class="main-terminal-panel text-left font-mono text-xs">
