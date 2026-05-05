@@ -224,13 +224,15 @@ body::before {
 }
 
 /* new hero area */
-.new-hero {.new-hero {
+.new-hero {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  padding: 0 18px 60px;
+  padding: 90px 18px 60px;
   background:
-    linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(0,0,0,0.65)),
+    radial-gradient(circle at center, rgba(60,255,40,0.10), transparent 35%),
+    linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.65));
+}
     url("tate-ai-hologram-robot.png");
   background-position: center top;
   background-size: cover;
@@ -459,6 +461,18 @@ footer {
 <section class="new-hero scan">
 
  <div class="hero-content text-center">
+   <div class="mb-5 glow text-sm tracking-[0.45em] opacity-80">
+  TATEAI TERMINAL
+</div>
+
+<h1 class="text-5xl md:text-7xl font-black hero-title mb-4">
+  TATE AI TERMINAL
+</h1>
+
+<p class="text-sm md:text-base tracking-[0.22em] opacity-80 mb-8">
+  DECENTRALIZED INTELLIGENCE. MARKET DOMINANCE. ABSOLUTE FREEDOM.
+</p>
+   
 
     <!-- MAIN TERMINAL PANEL -->
     <div id="terminal" class="main-terminal-panel text-left font-mono text-xs">
