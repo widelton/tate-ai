@@ -246,12 +246,41 @@ body::before {
 }
 
 .hero-robot-wrap img {
-  width: min(520px, 70vw);
-  opacity: 0.34;
-  transform: translateY(35px);
+  width: min(620px, 78vw);
+  opacity: 0.42;
+  object-fit: contain;
+  mix-blend-mode: screen;
+
   filter:
-    drop-shadow(0 0 18px rgba(108,255,58,0.35))
-    drop-shadow(0 0 40px rgba(108,255,58,0.12));
+    brightness(1.08)
+    contrast(1.08)
+    drop-shadow(0 0 18px rgba(108,255,58,0.45))
+    drop-shadow(0 0 48px rgba(108,255,58,0.18));
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse at center,
+      black 0%,
+      black 48%,
+      rgba(0,0,0,0.75) 64%,
+      rgba(0,0,0,0.28) 78%,
+      transparent 100%
+    );
+
+  mask-image:
+    radial-gradient(
+      ellipse at center,
+      black 0%,
+      black 48%,
+      rgba(0,0,0,0.75) 64%,
+      rgba(0,0,0,0.28) 78%,
+      transparent 100%
+    );
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 
 /* hologram light under robot */
