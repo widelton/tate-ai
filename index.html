@@ -184,6 +184,194 @@ canvas {
   margin-bottom: 6px;
 }
 
+  /* ===== NEW GREEN TERMINAL DESIGN ===== */
+
+:root {
+  --green: #6cff3a;
+  --green-soft: rgba(108,255,58,0.35);
+}
+
+body {
+  color: var(--green);
+  background:
+    radial-gradient(circle at center, rgba(60,255,40,0.12), transparent 35%),
+    linear-gradient(180deg, #020602 0%, #000 100%);
+}
+
+/* green grid instead of cyan grid */
+body::before {
+  background-image:
+    linear-gradient(rgba(108,255,58,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108,255,58,0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* green glow */
+.glow {
+  text-shadow:
+    0 0 8px rgba(108,255,58,0.95),
+    0 0 22px rgba(108,255,58,0.55),
+    0 0 48px rgba(108,255,58,0.25);
+}
+
+.hero-title {
+  background: linear-gradient(180deg, #ffffff 0%, #9cff7a 40%, #39ff14 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow:
+    0 0 14px rgba(108,255,58,0.8),
+    0 0 42px rgba(108,255,58,0.35);
+}
+
+/* new hero area */
+.new-hero {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  padding: 90px 18px 60px;
+}
+
+/* robot background position */
+.hero-robot-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-robot-wrap img {
+  width: min(620px, 82vw);
+  opacity: 0.78;
+}
+
+/* hologram light under robot */
+.holo-base {
+  position: absolute;
+  left: 50%;
+  top: 64%;
+  transform: translateX(-50%);
+  width: min(520px, 75vw);
+  height: 120px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(108,255,58,0.75), rgba(108,255,58,0.2) 35%, transparent 70%);
+  filter: blur(8px);
+  opacity: 0.75;
+  z-index: 0;
+}
+
+/* content above robot */
+.hero-content {
+  position: relative;
+  z-index: 3;
+  min-height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* main terminal panel */
+.main-terminal-panel {
+  width: min(780px, 94vw);
+  margin-top: 300px;
+  border: 1px solid rgba(108,255,58,0.45);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.82)),
+    radial-gradient(circle at top, rgba(108,255,58,0.16), transparent 45%);
+  box-shadow:
+    0 0 22px rgba(108,255,58,0.28),
+    inset 0 0 22px rgba(108,255,58,0.12);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 22px;
+}
+
+.terminal-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+}
+
+@media (max-width: 768px) {
+  .main-terminal-panel {
+    margin-top: 260px;
+  }
+
+  .terminal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* green buttons */
+.green-btn {
+  border: 1px solid rgba(108,255,58,0.75);
+  color: #b7ff9d;
+  box-shadow: 0 0 18px rgba(108,255,58,0.2);
+  transition: 0.25s ease;
+}
+
+.green-btn:hover {
+  background: rgba(108,255,58,0.12);
+  box-shadow: 0 0 28px rgba(108,255,58,0.45);
+}
+
+/* side menu button */
+.menu-toggle {
+  position: fixed;
+  top: 28px;
+  left: 28px;
+  z-index: 10000;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(108,255,58,0.75);
+  background: rgba(0,0,0,0.72);
+  color: var(--green);
+  border-radius: 16px;
+  font-size: 26px;
+  box-shadow: 0 0 20px rgba(108,255,58,0.35);
+}
+
+/* side menu drawer */
+.side-drawer {
+  position: fixed;
+  top: 95px;
+  left: 28px;
+  width: 245px;
+  z-index: 9999;
+  border: 1px solid rgba(108,255,58,0.45);
+  background: rgba(0,0,0,0.78);
+  backdrop-filter: blur(18px);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 0 35px rgba(108,255,58,0.22);
+  transform: translateX(-125%);
+  opacity: 0;
+  transition: 0.35s ease;
+}
+
+.side-drawer.open {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.side-drawer a {
+  display: block;
+  padding: 14px 12px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(108,255,58,0.16);
+  color: #d9ffd0;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.side-drawer a:hover {
+  background: rgba(108,255,58,0.1);
+  border-radius: 12px;
+}
   
 </style>
 </head>
@@ -192,94 +380,114 @@ canvas {
 
 <canvas id="particles"></canvas>
 
-<!-- NAVBAR -->
-<nav class="fixed w-full glass border-b border-cyan-500/20 z-50">
-  <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-    <div class="flex items-center gap-2 glow font-bold">
-      🤖 TATE AI
-    </div>
-    <div class="hidden md:flex gap-6 text-sm">
-     <a href="#">Home</a>
-     <a href="#about">About</a>
-     <a href="#token">Token</a>
-     <a href="#community">Community</a>
-    </div>
-    <a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump" target="_blank"
-       class="px-4 py-2 border border-cyan-400 rounded-xl glow hover:bg-cyan-400/10">
-       Buy $TATE
-    </a>
+<!-- SIDE MENU BUTTON -->
+<button class="menu-toggle" onclick="toggleSideMenu()">☰</button>
+
+<!-- SIDE MENU -->
+<aside id="sideMenu" class="side-drawer">
+  <a href="#terminal">TERMINAL</a>
+  <a href="#chart">MARKETS</a>
+  <a href="#token">STRATEGY</a>
+  <a href="#signals">SIGNALS</a>
+  <a href="#about">INTELLIGENCE</a>
+  <a href="#community">ABOUT</a>
+
+  <a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump"
+     target="_blank"
+     onclick="buySignal()"
+     class="mt-4 text-center border border-green-400/40 rounded-xl">
+     CONNECT WALLET
+  </a>
+</aside>
+
+<!-- NEW HERO -->
+<section class="new-hero scan">
+
+  <div class="holo-base"></div>
+
+  <div class="hero-robot-wrap">
+    <img id="heroRobot" src="Terminal_AI-removebg-preview.png" class="hologram robot-live">
   </div>
-</nav>
 
-<!-- HERO -->
-<section class="min-h-screen flex flex-col items-center text-center px-4 pt-32 pb-20 scan">
+  <div class="hero-content text-center">
 
-<img id="heroRobot" src="Terminal_AI-removebg-preview.png" class="w-[280px] md:w-[480px] lg:w-[600px] hologram robot-live mb-6 relative">
-  
-<h1 class="text-5xl md:text-7xl font-black glow hero-title mb-4">
-TATE AI
-</h1>
+    <div class="mb-5 glow text-sm tracking-[0.45em] opacity-80">
+      TATEAI TERMINAL
+    </div>
 
-<p class="text-lg opacity-70 mb-2">The AI Terminal Coin</p>
+    <h1 class="text-5xl md:text-7xl font-black hero-title mb-4">
+      TATE AI TERMINAL
+    </h1>
 
-<!-- CA + COPY -->
-<div class="mb-6">
-  <p class="text-xs opacity-60 break-all mb-2">
-  CA: BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump
-  </p>
-  <button onclick="copyCA()" class="text-xs border px-3 py-1 rounded-lg glow hover:bg-cyan-400/10">
-    Copy Address
-  </button>
+    <p class="text-sm md:text-base tracking-[0.22em] opacity-80 mb-8">
+      DECENTRALIZED INTELLIGENCE. MARKET DOMINANCE. ABSOLUTE FREEDOM.
+    </p>
 
-  
-</div>
+    <!-- MAIN TERMINAL PANEL -->
+    <div id="terminal" class="main-terminal-panel text-left font-mono text-xs">
 
-<div class="flex flex-wrap gap-4 justify-center">
-<a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump"
-   target="_blank"
-   onclick="buySignal()"
-   class="px-6 py-3 border border-cyan-400 rounded-xl glow glitch">
-   Buy $TATE
-</a>
+      <div class="terminal-grid">
 
-<a href="#chart"
-   onclick="viewChartSignal()"
-   class="px-6 py-3 border border-cyan-400 rounded-xl glow glitch">
-   View Live Chart
-</a>
-</div>
+        <!-- LEFT SIDE -->
+        <div>
+          <div class="flex justify-between items-center mb-3">
+            <div class="text-green-300 glow">TERMINAL FEED</div>
+            <div class="text-green-300">● LIVE</div>
+          </div>
 
-  <!-- LIVE DATA -->
-<div class="mt-8 glass border border-cyan-400/30 rounded-xl px-6 py-4 text-sm w-72 md:w-[520px] lg:w-[640px] text-center">
+          <div id="terminal-logs" class="mt-3 border-t border-green-400/20 pt-3 h-28 overflow-hidden"></div>
 
-  <p class="opacity-60 mb-2">LIVE SIGNAL</p>
+          <div class="terminal-input">
+            <span>&gt;</span>
+            <input id="terminalInput" type="text" placeholder="type help..." autocomplete="off">
+          </div>
+        </div>
 
-<p>Price: <span id="price" class="text-cyan-300">Loading...</span></p>
-<p>24h: <span id="change" class="text-green-400">Loading...</span></p>
-<p>Volume: <span id="volume" class="text-cyan-300">Loading...</span></p>
+        <!-- RIGHT SIDE -->
+        <div class="space-y-2">
+          <div id="t-status">STATUS: LOADING...</div>
+          <div id="t-price">PRICE: --</div>
+          <div id="t-change">24H: --</div>
+          <div id="t-volume">VOLUME: --</div>
 
-</div>
+          <div class="border-t border-green-400/20 pt-3 mt-3">
+            <p>Price: <span id="price" class="text-green-300">Loading...</span></p>
+            <p>24h: <span id="change" class="text-green-400">Loading...</span></p>
+            <p>Volume: <span id="volume" class="text-green-300">Loading...</span></p>
+          </div>
+        </div>
 
-  <!-- TERMINAL BOX -->
-<div id="terminal" class="mt-6 mb-10 glass border border-cyan-400/30 rounded-xl p-4 text-left font-mono text-xs w-72 md:w-[520px] lg:w-[640px] mx-auto">
-  <div class="text-cyan-300 mb-2">TATE TERMINAL</div>
+      </div>
 
-  <div id="t-status">STATUS: LOADING...</div>
-  <div id="t-price">PRICE: --</div>
-  <div id="t-change">24H: --</div>
-  <div id="t-volume">VOLUME: --</div>
+      <div class="flex flex-wrap gap-4 justify-center mt-6">
+        <a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump"
+           target="_blank"
+           onclick="buySignal()"
+           class="px-6 py-3 rounded-xl green-btn glitch">
+           ENTER TERMINAL
+        </a>
 
-  <div id="terminal-logs" class="mt-3 border-t border-cyan-400/20 pt-3 h-28 overflow-hidden"></div>
-  <div class="terminal-input">
-  <span>&gt;</span>
-  <input id="terminalInput" type="text" placeholder="type help..." autocomplete="off">
- </div>
+        <a href="#chart"
+           onclick="viewChartSignal()"
+           class="px-6 py-3 rounded-xl green-btn glitch">
+           VIEW LIVE SIGNALS
+        </a>
 
-</div>
+        <button onclick="copyCA()" class="px-6 py-3 rounded-xl green-btn glitch">
+          COPY CA
+        </button>
+      </div>
 
+      <p class="text-center text-[10px] opacity-60 break-all mt-5">
+        CA: BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump
+      </p>
+
+    </div>
+
+  </div>
 </section>
 
-<section class="max-w-4xl mx-auto py-20 px-4 text-center">
+<section id="signals" class="max-w-4xl mx-auto py-20 px-4 text-center">
   <h2 class="text-3xl glow mb-6">AI SIGNAL SCANNER</h2>
 
   <p class="opacity-70 mb-6">
@@ -926,6 +1134,17 @@ document.addEventListener("keydown", resetIdleTimer);
 
 resetIdleTimer();
 
+function toggleSideMenu() {
+  const menu = document.getElementById("sideMenu");
+
+  menu.classList.toggle("open");
+
+  playBeep();
+
+  typeLine("[MENU ACCESS]");
+  typeLine("> navigation layer toggled...");
+}
+  
   function viewChartSignal() {
   playBeep();
 
