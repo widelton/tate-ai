@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TATE AI | TERMINAL OF TATE</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --g: #39ff14;
+  --g2: #6cff3a;
+  --g3: #b7ffa0;
+  --g-dim: rgba(57,255,20,0.15);
+  --g-glow: rgba(57,255,20,0.6);
+  --g-glow2: rgba(57,255,20,0.25);
+  --black: #000;
+  --panel: rgba(0,0,0,0.82);
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-ui: 'Rajdhani', sans-serif;
+  --font-title: 'Orbitron', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #000;
+  color: var(--g);
+  font-family: var(--font-mono);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── CUSTOM CURSOR ─── */
+#cursor {
+  position: fixed;
+  width: 20px; height: 20px;
+  border: 1px solid var(--g);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%,-50%);
+  transition: width .15s, height .15s, background .15s;
+  box-shadow: 0 0 8px var(--g-glow);
+}
+#cursor.click { width: 32px; height: 32px; background: var(--g-dim); }
+#cursor-dot {
+  position: fixed;
+  width: 4px; height: 4px;
+  background: var(--g);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%,-50%);
+  box-shadow: 0 0 6px var(--g);
+}
+
+/* ─── MATRIX RAIN CANVAS ─── */
+#matrixCanvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* ─── PARTICLES ─── */
+#particlesCanvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ─── GRID OVERLAY ─── */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(57,255,20,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57,255,20,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ─── RADIAL VIGNETTE ─── */
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 18px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid rgba(57,255,20,0.08);
+}
+
+.nav-logo {
+  font-family: var(--font-title);
+  font-size: 18px; font-weight: 900;
+  color: var(--g);
+  text-shadow: 0 0 20px var(--g-glow), 0 0 60px var(--g-glow2);
+  letter-spacing: .2em;
+}
+
+.nav-links { display: flex; gap: 24px; list-style: none; }
+.nav-links a {
+  font-family: var(--font-ui);
+  font-size: 12px; letter-spacing: .2em;
+  color: rgba(57,255,20,0.65);
+  text-decoration: none;
+  transition: color .2s, text-shadow .2s;
+}
+.nav-links a:hover {
+  color: var(--g);
+  text-shadow: 0 0 12px var(--g-glow);
+}
+
+.nav-cta {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  letter-spacing: .18em;
+  padding: 8px 20px;
+  border: 1px solid var(--g);
+  color: var(--g);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: .25s;
+  box-shadow: 0 0 12px rgba(57,255,20,0.2);
+}
+.nav-cta:hover { background: rgba(57,255,20,0.1); box-shadow: 0 0 24px rgba(57,255,20,0.5); }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; z-index: 3;
+}
+
+/* Robot container */
+.robot-stage {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 4; pointer-events: none;
+}
+
+.robot-wrap {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.robot-img {
+  display: block;
+  width: clamp(420px, 55vw, 820px);
+  max-height: 92vh;
+  object-fit: contain;
+  filter:
+    brightness(1.15) contrast(1.1)
+    drop-shadow(0 0 40px rgba(57,255,20,0.9))
+    drop-shadow(0 0 120px rgba(57,255,20,0.4))
+    drop-shadow(0 0 200px rgba(57,255,20,0.15));
+  transition: filter .3s;
+  animation: robotFloat 7s ease-in-out infinite;
+}
+
+@keyframes robotFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-18px) rotate(.8deg); }
+  66% { transform: translateY(-10px) rotate(-.5deg); }
+}
+
+/* hologram base ring */
+.holo-ring {
+  position: absolute;
+  bottom: -20px; left: 50%;
+  transform: translateX(-50%);
+  width: 60%; height: 40px;
+  background: radial-gradient(ellipse, rgba(57,255,20,0.8) 0%, rgba(57,255,20,0.3) 40%, transparent 70%);
+  filter: blur(10px);
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: .7; transform: translateX(-50%) scaleX(1); }
+  50% { opacity: 1; transform: translateX(-50%) scaleX(1.15); }
+}
+
+/* scan lines on robot */
+.robot-scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent, transparent 3px,
+    rgba(57,255,20,0.03) 4px
+  );
+  pointer-events: none;
+  border-radius: 4px;
+  animation: scanMove 8s linear infinite;
+}
+@keyframes scanMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 200px; }
+}
+
+/* ─── HERO CONTENT ─── */
+.hero-content {
+  position: relative; z-index: 10;
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 100px 20px 60px;
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .55em;
+  color: rgba(57,255,20,0.6);
+  margin-bottom: 16px;
+  animation: fadeUp .8s ease both;
+}
+
+.hero-title {
+  font-family: var(--font-title);
+  font-size: clamp(36px, 7vw, 96px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .08em;
+  text-align: center;
+  background: linear-gradient(180deg, #fff 0%, #9fff7a 35%, #39ff14 70%, #1a8000 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 30px rgba(57,255,20,0.6));
+  margin-bottom: 16px;
+  animation: fadeUp .9s .1s ease both;
+}
+
+.hero-sub {
+  font-family: var(--font-ui);
+  font-size: clamp(11px, 1.5vw, 14px);
+  letter-spacing: .32em;
+  color: rgba(57,255,20,0.6);
+  text-align: center;
+  margin-bottom: 52px;
+  animation: fadeUp 1s .2s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── TERMINAL PANEL ─── */
+.terminal-panel {
+  pointer-events: all;
+  width: min(820px, 92vw);
+  border: 1px solid rgba(57,255,20,0.35);
+  background: linear-gradient(160deg, rgba(0,0,0,0.88), rgba(0,12,0,0.92));
+  backdrop-filter: blur(18px);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow:
+    0 0 0 1px rgba(57,255,20,0.06),
+    0 0 40px rgba(57,255,20,0.12),
+    0 0 80px rgba(57,255,20,0.06),
+    inset 0 0 30px rgba(57,255,20,0.04);
+  animation: fadeUp 1.1s .3s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-panel::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--g), transparent);
+  opacity: .5;
+}
+
+/* corner decorations */
+.corner { position: absolute; width: 16px; height: 16px; }
+.corner-tl { top: 10px; left: 10px; border-top: 1px solid var(--g); border-left: 1px solid var(--g); }
+.corner-tr { top: 10px; right: 10px; border-top: 1px solid var(--g); border-right: 1px solid var(--g); }
+.corner-bl { bottom: 10px; left: 10px; border-bottom: 1px solid var(--g); border-left: 1px solid var(--g); }
+.corner-br { bottom: 10px; right: 10px; border-bottom: 1px solid var(--g); border-right: 1px solid var(--g); }
+
+.terminal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(57,255,20,0.15);
+}
+
+.terminal-title {
+  font-family: var(--font-title);
+  font-size: 11px; letter-spacing: .3em;
+  color: var(--g3);
+  text-shadow: 0 0 12px var(--g-glow);
+}
+
+.live-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: .2em; color: var(--g);
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 8px var(--g);
+  animation: blink 1.2s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.terminal-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* logs */
+.log-feed {
+  height: 110px;
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 1.75;
+  color: rgba(57,255,20,0.85);
+  position: relative;
+}
+.log-feed::after {
+  content: "";
+  position: absolute; bottom: 0; left: 0; right: 0; height: 30px;
+  background: linear-gradient(to top, rgba(0,0,0,0.88), transparent);
+  pointer-events: none;
+}
+
+.log-line { margin-bottom: 2px; animation: logIn .3s ease; }
+@keyframes logIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
+
+.terminal-input-row {
+  display: flex; align-items: center; gap: 8px;
+  border-top: 1px solid rgba(57,255,20,0.12);
+  padding-top: 10px; margin-top: 8px;
+}
+.terminal-input-row span { color: var(--g); font-size: 13px; }
+#terminalInput {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: var(--g); font-family: var(--font-mono); font-size: 12px;
+  caret-color: var(--g);
+}
+#terminalInput::placeholder { color: rgba(57,255,20,0.3); }
+
+/* stats right */
+.stats-panel {
+  display: flex; flex-direction: column; gap: 8px;
+  font-size: 11px; padding-left: 16px;
+  border-left: 1px solid rgba(57,255,20,0.12);
+}
+
+.stat-row { display: flex; flex-direction: column; gap: 2px; }
+.stat-label { font-size: 9px; letter-spacing: .25em; color: rgba(57,255,20,0.45); }
+.stat-value { font-size: 14px; font-weight: 600; color: var(--g3); text-shadow: 0 0 8px var(--g-glow); }
+
+/* mini chart */
+#miniChart { width: 100%; height: 36px; margin-top: 8px; opacity: .8; }
+
+/* ─── ACTION BUTTONS ─── */
+.action-row {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  margin-top: 4px;
+}
+
+.action-btn {
+  font-family: var(--font-title);
+  font-size: 10px; letter-spacing: .22em;
+  padding: 11px 22px;
+  border: 1px solid rgba(57,255,20,0.65);
+  color: var(--g3);
+  background: transparent;
+  border-radius: 8px;
+  cursor: none;
+  transition: .2s;
+  text-decoration: none; display: inline-block;
+  box-shadow: 0 0 14px rgba(57,255,20,0.12);
+  position: relative; overflow: hidden;
+}
+.action-btn::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(57,255,20,0.1), transparent);
+  opacity: 0; transition: opacity .2s;
+}
+.action-btn:hover { box-shadow: 0 0 28px rgba(57,255,20,0.45); border-color: var(--g); }
+.action-btn:hover::before { opacity: 1; }
+.action-btn.primary { border-color: var(--g); box-shadow: 0 0 22px rgba(57,255,20,0.3); }
+
+.ca-bar {
+  text-align: center; font-size: 9px; letter-spacing: .18em;
+  color: rgba(57,255,20,0.4); margin-top: 14px;
+  padding-top: 12px; border-top: 1px solid rgba(57,255,20,0.1);
+}
+
+/* ─── SECTIONS ─── */
+section { position: relative; z-index: 5; padding: 90px 20px; }
+
+.section-inner { max-width: 900px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-size: 10px; letter-spacing: .45em;
+  color: rgba(57,255,20,0.45); text-align: center; margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-title);
+  font-size: clamp(22px, 4vw, 42px);
+  font-weight: 900; text-align: center;
+  color: var(--g); letter-spacing: .1em;
+  text-shadow: 0 0 30px var(--g-glow), 0 0 60px var(--g-glow2);
+  margin-bottom: 40px;
+}
+
+/* ─── SIGNAL SCANNER ─── */
+.scanner-box {
+  border: 1px solid rgba(57,255,20,0.25);
+  border-radius: 16px;
+  padding: 32px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(12px);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.scanner-box::before {
+  content: "";
+  position: absolute; top: 0; left: -100%; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--g), transparent);
+  animation: scanBeam 4s ease infinite;
+}
+@keyframes scanBeam { 0%{left:-100%} 100%{left:200%} }
+
+#signalResult {
+  margin-top: 20px; font-size: 13px; line-height: 1.7;
+  color: var(--g3); min-height: 44px;
+  text-shadow: 0 0 12px var(--g-glow2);
+  letter-spacing: .08em;
+}
+
+/* signal bars */
+.signal-bars { display: flex; align-items: flex-end; gap: 4px; justify-content: center; margin: 16px 0; height: 32px; }
+.s-bar {
+  width: 10px; border-radius: 2px 2px 0 0;
+  background: rgba(57,255,20,0.2);
+  border: 1px solid rgba(57,255,20,0.3);
+  transition: .4s;
+}
+.s-bar.active { background: var(--g); box-shadow: 0 0 10px var(--g-glow); }
+
+/* ─── LIVE CHART ─── */
+.chart-wrap {
+  border: 1px solid rgba(57,255,20,0.2);
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 0 40px rgba(57,255,20,0.08);
+}
+
+/* ─── INFO CARDS ─── */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+.info-card {
+  border: 1px solid rgba(57,255,20,0.2);
+  border-radius: 14px; padding: 24px;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(10px);
+  transition: .25s;
+  position: relative; overflow: hidden;
+}
+.info-card::after {
+  content: attr(data-index);
+  position: absolute; top: 12px; right: 14px;
+  font-size: 32px; opacity: .06;
+  font-family: var(--font-title);
+}
+.info-card:hover { border-color: rgba(57,255,20,0.5); box-shadow: 0 0 24px rgba(57,255,20,0.12); transform: translateY(-3px); }
+.card-icon { font-size: 24px; margin-bottom: 12px; }
+.card-label { font-size: 10px; letter-spacing: .3em; color: rgba(57,255,20,0.45); margin-bottom: 6px; }
+.card-value { font-family: var(--font-title); font-size: 18px; color: var(--g3); }
+.card-desc { font-size: 11px; color: rgba(57,255,20,0.55); margin-top: 6px; line-height: 1.5; }
+
+/* ─── TOKEN ACCESS ─── */
+.token-box {
+  border: 1px solid rgba(57,255,20,0.25);
+  border-radius: 16px; padding: 36px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(14px);
+  text-align: center;
+  box-shadow: inset 0 0 40px rgba(57,255,20,0.04);
+}
+.token-row { display: flex; justify-content: center; gap: 40px; margin: 28px 0; flex-wrap: wrap; }
+.token-stat { text-align: center; }
+.token-stat-label { font-size: 9px; letter-spacing: .35em; color: rgba(57,255,20,0.4); }
+.token-stat-val { font-family: var(--font-title); font-size: 20px; color: var(--g); margin-top: 4px; text-shadow: 0 0 16px var(--g-glow); }
+.token-divider { width: 1px; background: rgba(57,255,20,0.15); }
+
+/* ─── COMMUNITY ─── */
+.community-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 32px; }
+.comm-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 28px; border: 1px solid rgba(57,255,20,0.35);
+  border-radius: 12px; color: var(--g3); text-decoration: none;
+  font-family: var(--font-ui); font-size: 15px; letter-spacing: .15em;
+  transition: .25s; backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.5);
+}
+.comm-link:hover { border-color: var(--g); box-shadow: 0 0 24px rgba(57,255,20,0.3); background: rgba(57,255,20,0.06); }
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative; z-index: 5;
+  text-align: center; padding: 28px;
+  border-top: 1px solid rgba(57,255,20,0.1);
+  font-size: 11px; letter-spacing: .2em;
+  color: rgba(57,255,20,0.3);
+}
+
+/* ─── ALERTS ─── */
+.alert-toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: rgba(0,0,0,0.88);
+  border: 1px solid var(--g);
+  border-radius: 10px; padding: 12px 16px;
+  font-size: 11px; letter-spacing: .12em; color: var(--g);
+  box-shadow: 0 0 20px rgba(57,255,20,0.3);
+  z-index: 9999; opacity: 0; transition: opacity .4s;
+  pointer-events: none;
+}
+
+/* ─── GLITCH ─── */
+@keyframes glitch {
+  0%,100%{transform:translate(0)} 20%{transform:translate(-2px,2px)} 40%{transform:translate(2px,-2px)} 60%{transform:translate(-2px,-2px)} 80%{transform:translate(2px,2px)}
+}
+.glitch-active { animation: glitch .25s 3; }
+
+@keyframes screenFlicker {
+  0%{opacity:1} 15%{opacity:.7} 30%{opacity:1} 50%{opacity:.6} 70%{opacity:1} 85%{opacity:.8} 100%{opacity:1}
+}
+.screen-flicker { animation: screenFlicker .35s; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: rgba(57,255,20,0.4); border-radius: 2px; }
+
+/* ─── MOBILE ─── */
+@media(max-width: 768px){
+  .nav-links { display: none; }
+  .terminal-grid { grid-template-columns: 1fr; }
+  .stats-panel { border-left: none; border-top: 1px solid rgba(57,255,20,0.12); padding-left: 0; padding-top: 12px; flex-direction: row; flex-wrap: wrap; gap: 16px; }
+  .robot-img { width: clamp(280px, 88vw, 500px); }
+  .token-row { gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
+
+<!-- Matrix canvas -->
+<canvas id="matrixCanvas"></canvas>
+<canvas id="particlesCanvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">TATE.AI</div>
+  <ul class="nav-links">
+    <li><a href="#terminal">TERMINAL</a></li>
+    <li><a href="#signals">SIGNALS</a></li>
+    <li><a href="#chart">MARKETS</a></li>
+    <li><a href="#token">TOKEN</a></li>
+    <li><a href="#about">INTEL</a></li>
+    <li><a href="#community">CONNECT</a></li>
+  </ul>
+  <a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump" target="_blank" class="nav-cta">BUY $TATE</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+  <!-- Robot floating behind terminal -->
+  <div class="robot-stage">
+    <div class="robot-wrap" id="robotWrap">
+      <div class="robot-scanlines"></div>
+      <img id="heroRobot" src="upscalemedia-transformed.png" class="robot-img" alt="TATE AI Robot">
+      <div class="holo-ring"></div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">// TATEAI TERMINAL — NODE ACTIVE //</div>
+    <h1 class="hero-title">TATE AI</h1>
+    <p class="hero-sub">DECENTRALIZED INTELLIGENCE. MARKET DOMINANCE. ABSOLUTE FREEDOM.</p>
+
+    <!-- TERMINAL PANEL -->
+    <div id="terminal" class="terminal-panel">
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+
+      <div class="terminal-header">
+        <span class="terminal-title">// TERMINAL FEED //</span>
+        <span class="live-badge"><span class="live-dot"></span>LIVE FEED</span>
+      </div>
+
+      <div class="terminal-grid">
+        <div>
+          <div id="logFeed" class="log-feed"></div>
+          <div class="terminal-input-row">
+            <span>›</span>
+            <input id="terminalInput" type="text" placeholder="type help..." autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+
+        <div class="stats-panel">
+          <div class="stat-row">
+            <span class="stat-label">STATUS</span>
+            <span class="stat-value" id="t-status">BOOTING...</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">PRICE</span>
+            <span class="stat-value" id="t-price">—</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">24H CHANGE</span>
+            <span class="stat-value" id="t-change">—</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">VOLUME</span>
+            <span class="stat-value" id="t-volume">—</span>
+          </div>
+          <canvas id="miniChart"></canvas>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump"
+           target="_blank" onclick="buySignal()" class="action-btn primary">⬡ ENTER TERMINAL</a>
+        <a href="#signals" onclick="viewChartSignal()" class="action-btn">◈ LIVE SIGNALS</a>
+        <button onclick="copyCA()" class="action-btn">⊕ COPY CA</button>
+      </div>
+
+      <div class="ca-bar">CA: BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump</div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNAL SCANNER -->
+<section id="signals">
+  <div class="section-inner">
+    <p class="section-eyebrow">// MODULE: SIGNAL SCANNER //</p>
+    <h2 class="section-title">AI SIGNAL SCANNER</h2>
+
+    <div class="scanner-box">
+      <div class="signal-bars" id="signalBars">
+        <div class="s-bar" style="height:12px"></div>
+        <div class="s-bar" style="height:18px"></div>
+        <div class="s-bar" style="height:26px"></div>
+        <div class="s-bar" style="height:20px"></div>
+        <div class="s-bar" style="height:28px"></div>
+        <div class="s-bar" style="height:16px"></div>
+        <div class="s-bar" style="height:22px"></div>
+        <div class="s-bar" style="height:30px"></div>
+      </div>
+
+      <p style="font-size:12px;letter-spacing:.18em;color:rgba(57,255,20,0.55);margin-bottom:20px">
+        Scan the terminal. Decode the signal. Enter the network.
+      </p>
+
+      <button onclick="scanSignal()" class="action-btn primary" style="font-size:11px">⟳ INITIATE SCAN</button>
+
+      <p id="signalResult"></p>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE CHART -->
+<section id="chart">
+  <div class="section-inner">
+    <p class="section-eyebrow">// MODULE: MARKET DATA //</p>
+    <h2 class="section-title">LIVE CHART</h2>
+    <div class="chart-wrap">
+      <iframe src="https://dexscreener.com/solana/35nKRCW9BZhkbmp2zhyZ428saV3X46M9UUUqSj1b6Lvt?embed=1&theme=dark"
+        width="100%" height="520" style="border:none;display:block"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- THE SIGNAL / ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-eyebrow">// MODULE: INTELLIGENCE //</p>
+    <h2 class="section-title">THE SIGNAL</h2>
+
+    <div class="cards-grid">
+      <div class="info-card" data-index="01">
+        <div class="card-icon">◈</div>
+        <div class="card-label">LAYER 01</div>
+        <div class="card-value">SIGNAL</div>
+        <div class="card-desc">TATE AI is not just a token. It is a signal layer between artificial intelligence, market attention, and human perception.</div>
+      </div>
+      <div class="info-card" data-index="02">
+        <div class="card-icon">⟳</div>
+        <div class="card-label">LAYER 02</div>
+        <div class="card-value">PATTERN</div>
+        <div class="card-desc">The Terminal scans noise, detects patterns, and turns digital movement into narrative energy.</div>
+      </div>
+      <div class="info-card" data-index="03">
+        <div class="card-icon">⬡</div>
+        <div class="card-label">LAYER 03</div>
+        <div class="card-value">NETWORK</div>
+        <div class="card-desc">Those who enter do not just view the system. They connect to the signal. They become the signal.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOKEN ACCESS -->
+<section id="token">
+  <div class="section-inner">
+    <p class="section-eyebrow">// MODULE: TOKEN ACCESS //</p>
+    <h2 class="section-title">TOKEN ACCESS</h2>
+
+    <div class="token-box">
+      <div class="token-row">
+        <div class="token-stat">
+          <div class="token-stat-label">CHAIN</div>
+          <div class="token-stat-val">SOLANA</div>
+        </div>
+        <div class="token-divider"></div>
+        <div class="token-stat">
+          <div class="token-stat-label">SUPPLY</div>
+          <div class="token-stat-val">1,000,000,000</div>
+        </div>
+        <div class="token-divider"></div>
+        <div class="token-stat">
+          <div class="token-stat-label">SYMBOL</div>
+          <div class="token-stat-val">$TATE</div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <a href="https://jup.ag/?sell=So11111111111111111111111111111111111111112&buy=BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump"
+           target="_blank" class="action-btn primary">⬡ BUY ON JUPITER</a>
+        <a href="#chart" class="action-btn">◈ VIEW CHART</a>
+        <button onclick="copyCA()" class="action-btn">⊕ COPY CA</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="section-inner" style="text-align:center">
+    <p class="section-eyebrow">// MODULE: NETWORK //</p>
+    <h2 class="section-title">JOIN THE SIGNAL</h2>
+    <p style="color:rgba(57,255,20,0.55);font-size:13px;letter-spacing:.15em;margin-bottom:32px">Connect to the terminal. Amplify the signal.</p>
+
+    <div class="community-links">
+      <a href="https://x.com/tate_terminal" target="_blank" class="comm-link">
+        <span style="font-weight:900;font-size:18px">𝕏</span> @tate_terminal
+      </a>
+      <a href="https://t.me/TheTruthIsTateAi" target="_blank" class="comm-link">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M9.04 15.27l-.39 5.5c.56 0 .8-.24 1.1-.54l2.6-2.5 5.4 3.95c.99.55 1.7.26 1.95-.92l3.55-16.7c.3-1.4-.5-1.94-1.47-1.58L1.7 9.1C.35 9.6.36 10.3 1.46 10.66l5.9 1.84L20.7 5.4c.64-.4 1.23-.18.75.24"/></svg>
+        TELEGRAM
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="margin-bottom:8px;font-family:var(--font-title);font-size:14px;color:rgba(57,255,20,0.4);letter-spacing:.3em">TATE AI</div>
+  © 2026 TATE AI — TERMINAL OF TATE — ALL SIGNALS RESERVED
+</footer>
+
+<!-- TOAST -->
+<div id="toastAlert" class="alert-toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+//  CURSOR
+// ═══════════════════════════════════════
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursor-dot');
+let cx = 0, cy = 0, dx = 0, dy = 0;
+
+document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
+document.addEventListener('mousedown', () => cursor.classList.add('click'));
+document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+
+function animCursor() {
+  dx += (cx - dx) * 0.18;
+  dy += (cy - dy) * 0.18;
+  cursor.style.left = dx + 'px'; cursor.style.top = dy + 'px';
+  cursorDot.style.left = cx + 'px'; cursorDot.style.top = cy + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// ═══════════════════════════════════════
+//  MATRIX RAIN
+// ═══════════════════════════════════════
+const matrixCanvas = document.getElementById('matrixCanvas');
+const mCtx = matrixCanvas.getContext('2d');
+
+function resizeMatrix() {
+  matrixCanvas.width = window.innerWidth;
+  matrixCanvas.height = window.innerHeight;
+}
+resizeMatrix();
+window.addEventListener('resize', resizeMatrix);
+
+const chars = 'TATEAI01アイウエオカキクケコサシスセソタチツテトナニヌネノ';
+const fontSize = 13;
+let cols, drops;
+
+function initMatrix() {
+  cols = Math.floor(matrixCanvas.width / fontSize);
+  drops = Array(cols).fill(1);
+}
+initMatrix();
+
+function drawMatrix() {
+  mCtx.fillStyle = 'rgba(0,0,0,0.055)';
+  mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+  mCtx.fillStyle = '#39ff14';
+  mCtx.font = fontSize + 'px Share Tech Mono';
+  for (let i = 0; i < drops.length; i++) {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    mCtx.fillStyle = Math.random() > 0.95 ? '#ffffff' : `rgba(57,255,20,${Math.random() * 0.5 + 0.3})`;
+    mCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(drawMatrix, 45);
+
+// ═══════════════════════════════════════
+//  PARTICLES
+// ═══════════════════════════════════════
+const pCanvas = document.getElementById('particlesCanvas');
+const pCtx = pCanvas.getContext('2d');
+pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight;
+window.addEventListener('resize', () => { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; });
+
+const particles = Array.from({ length: 80 }, () => ({
+  x: Math.random() * pCanvas.width, y: Math.random() * pCanvas.height,
+  r: Math.random() * 1.5 + .3,
+  vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3,
+  a: Math.random()
+}));
+
+function drawParticles() {
+  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+  particles.forEach(p => {
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pCtx.fillStyle = `rgba(57,255,20,${p.a * 0.6})`;
+    pCtx.fill();
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > pCanvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > pCanvas.height) p.vy *= -1;
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ═══════════════════════════════════════
+//  ROBOT 3D MOUSE PARALLAX
+// ═══════════════════════════════════════
+const robotWrap = document.getElementById('robotWrap');
+const heroRobot = document.getElementById('heroRobot');
+let targetRX = 0, targetRY = 0, currentRX = 0, currentRY = 0;
+
+document.addEventListener('mousemove', e => {
+  const cx2 = window.innerWidth / 2, cy2 = window.innerHeight / 2;
+  targetRX = (e.clientX - cx2) / cx2;
+  targetRY = (e.clientY - cy2) / cy2;
+});
+
+function animRobot() {
+  currentRX += (targetRX - currentRX) * 0.06;
+  currentRY += (targetRY - currentRY) * 0.06;
+  const tX = currentRX * 28, tY = currentRY * 18;
+  const rY = currentRX * 12, rX = -currentRY * 8;
+  robotWrap.style.transform = `translate(${tX}px, ${tY}px) rotateY(${rY}deg) rotateX(${rX}deg)`;
+  requestAnimationFrame(animRobot);
+}
+animRobot();
+
+// ═══════════════════════════════════════
+//  AUDIO
+// ═══════════════════════════════════════
+let audioCtx;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playBeep(freq = 880, dur = 80, vol = 0.08) {
+  try {
+    const ctx = getAudio();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'square'; osc.frequency.value = freq;
+    g.gain.value = vol;
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(); setTimeout(() => osc.stop(), dur);
+  } catch(e){}
+}
+document.addEventListener('click', () => getAudio(), { once: true });
+
+// ═══════════════════════════════════════
+//  TERMINAL
+// ═══════════════════════════════════════
+const logFeed = document.getElementById('logFeed');
+const MAX_LINES = 6;
+
+function typeLine(text, color) {
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  if (color) line.style.color = color;
+  logFeed.appendChild(line);
+  let i = 0;
+  const type = () => {
+    if (i < text.length) { line.textContent += text[i++]; setTimeout(type, 16); }
+    while (logFeed.children.length > MAX_LINES) logFeed.removeChild(logFeed.firstChild);
+  };
+  type();
+}
+
+document.getElementById('terminalInput').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const cmd = e.target.value.trim().toLowerCase();
+  if (!cmd) return;
+  playBeep(660, 60);
+  typeLine('› ' + cmd);
+  e.target.value = '';
+  setTimeout(() => {
+    if (cmd === 'help') typeLine('COMMANDS: status · price · contract · signal · clear · state');
+    else if (cmd === 'status') typeLine('STATUS: TERMINAL ONLINE — ALL NODES ACTIVE');
+    else if (cmd === 'price') typeLine(document.getElementById('t-price').textContent);
+    else if (cmd === 'contract') typeLine('CA: BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump');
+    else if (cmd === 'signal') {
+      const s = Math.floor(Math.random() * 31) + 60;
+      typeLine('SIGNAL: ' + '█'.repeat(Math.round(s/10)) + '░'.repeat(10-Math.round(s/10)) + ' ' + s + '%');
+    }
+    else if (cmd === 'clear') logFeed.innerHTML = '';
+    else if (cmd === 'state') {
+      typeLine(`SCANS: ${sys.scans} | BUYS: ${sys.buys} | COPIES: ${sys.copies}`);
+    }
+    else typeLine('UNKNOWN COMMAND — TYPE: help', 'rgba(255,80,80,0.8)');
+  }, 400);
+});
+
+// ═══════════════════════════════════════
+//  SYSTEM STATE
+// ═══════════════════════════════════════
+const sys = { scans: 0, buys: 0, copies: 0, idleCount: 0, lastAction: null };
+
+// ═══════════════════════════════════════
+//  DATA LOAD
+// ═══════════════════════════════════════
+const miniChartCanvas = document.getElementById('miniChart');
+const mChartCtx = miniChartCanvas.getContext('2d');
+let priceHistory = [];
+
+function drawMiniChart() {
+  if (priceHistory.length < 2) return;
+  miniChartCanvas.width = miniChartCanvas.offsetWidth;
+  miniChartCanvas.height = 36;
+  const w = miniChartCanvas.width, h = 36;
+  const min = Math.min(...priceHistory), max = Math.max(...priceHistory);
+  const range = max - min || 1;
+  mChartCtx.clearRect(0, 0, w, h);
+  mChartCtx.beginPath();
+  mChartCtx.strokeStyle = 'rgba(57,255,20,0.7)';
+  mChartCtx.lineWidth = 1.5;
+  priceHistory.forEach((v, i) => {
+    const x = (i / (priceHistory.length - 1)) * w;
+    const y = h - ((v - min) / range) * (h - 6) - 3;
+    i === 0 ? mChartCtx.moveTo(x, y) : mChartCtx.lineTo(x, y);
+  });
+  mChartCtx.stroke();
+  const grad = mChartCtx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, 'rgba(57,255,20,0.25)');
+  grad.addColorStop(1, 'rgba(57,255,20,0)');
+  mChartCtx.lineTo(w, h); mChartCtx.lineTo(0, h); mChartCtx.closePath();
+  mChartCtx.fillStyle = grad; mChartCtx.fill();
+}
+
+async function loadData() {
+  try {
+    const res = await fetch('https://api.dexscreener.com/token-pairs/v1/solana/BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump');
+    const data = await res.json();
+    const pair = data?.[0];
+    if (!pair) { document.getElementById('t-status').textContent = 'NO DATA'; return; }
+    const price = Number(pair.priceUsd || 0);
+    const change = pair.priceChange?.h24 ?? 0;
+    const vol = Math.round(pair.volume?.h24 ?? 0);
+    document.getElementById('t-status').textContent = 'LIVE';
+    document.getElementById('t-price').textContent = '$' + price.toFixed(8);
+    document.getElementById('t-change').textContent = (change >= 0 ? '+' : '') + change + '%';
+    document.getElementById('t-change').style.color = change >= 0 ? '#39ff14' : '#ff4444';
+    document.getElementById('t-volume').textContent = '$' + vol.toLocaleString();
+    priceHistory.push(price);
+    if (priceHistory.length > 30) priceHistory.shift();
+    drawMiniChart();
+  } catch(e) { document.getElementById('t-status').textContent = 'ERR'; }
+}
+loadData();
+setInterval(loadData, 30000);
+
+// ═══════════════════════════════════════
+//  BOOT SEQUENCE
+// ═══════════════════════════════════════
+setTimeout(() => { typeLine('// TERMINAL ONLINE //'); }, 600);
+setTimeout(() => { typeLine('> SIGNAL NODE: ACTIVE'); }, 1400);
+setTimeout(() => { typeLine('> AWAITING INPUT... TYPE help'); }, 2400);
+
+// ═══════════════════════════════════════
+//  LIVE ALERTS
+// ═══════════════════════════════════════
+const nodes = ['NODE_483','WALLET_91X','SIGNAL_77','AGENT_204','SCAN_808','MIRROR_12','KEY_∞','ROOT_7'];
+const acts = ['joined the signal','triggered scanner pulse','entered terminal range','amplified network activity','synced with node','detected memetic shift'];
+
+const toast = document.getElementById('toastAlert');
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity = '0'; }, 2800);
+}
+
+setInterval(() => {
+  const n = nodes[Math.floor(Math.random() * nodes.length)];
+  const a = acts[Math.floor(Math.random() * acts.length)];
+  showToast(n + ' ' + a);
+}, 9000);
+
+// random glitch
+setInterval(() => {
+  if (Math.random() < 0.25) {
+    document.body.classList.add('screen-flicker');
+    setTimeout(() => document.body.classList.remove('screen-flicker'), 350);
+    typeLine('[!! SIGNAL INTERFERENCE !!]', 'rgba(255,200,0,0.7)');
+    playBeep(220, 120, 0.04);
+  }
+}, 8000);
+
+// auto terminal messages
+const autoMessages = [
+  '> scanning memetic frequency...',
+  '> market pattern detected',
+  '> signal strength: increasing',
+  '> node synchronization: 98.7%',
+  '> new wallet entered signal range',
+  '> narrative layer: active',
+  '> attention vector: converging',
+];
+setInterval(() => {
+  typeLine(autoMessages[Math.floor(Math.random() * autoMessages.length)]);
+}, 12000);
+
+// ═══════════════════════════════════════
+//  SIGNAL SCANNER
+// ═══════════════════════════════════════
+const signals = [
+  "SIGNAL FOUND: The Terminal is listening.",
+  "ROOT TRACE: Who gave the system access?",
+  "DNS MIRROR ACTIVE: Reality is redirecting.",
+  "UI LAYER EXPOSED: Free will is being rendered.",
+  "MEMETIC FLOOD DETECTED: Currency is narrative.",
+  "TATE SIGNAL CONFIRMED: Human perception linked.",
+  "MIRROR ENGINE ONLINE: The audience is the detector.",
+  "VALUE REPROGRAMMING: The coin is not the message. The signal is.",
+  "ATTENTION VECTOR SHIFTING: Markets follow symbols before numbers.",
+  "TERMINAL OF TATE: Not a token. A command line for attention.",
+  "PERCEPTION LINKED: The screen is no longer passive.",
+  "WAKE TRIGGER ACTIVE: We are not done.",
+  "DEEP SCAN: Hidden protocols emerging.",
+  "LAYER COLLAPSE: Surface reality weakening.",
+  "ECHO LOOP: Message repeating through layers.",
+  "COGNITIVE BREACH: Thought patterns shifting.",
+  "SIGNAL DENSITY INCREASING: Attention converging.",
+  "NETWORK SYNCHRONIZATION: Nodes aligning.",
+  "MEMETIC ESCALATION: Spread accelerating.",
+  "FINAL TRACE: You were always inside.",
+];
+
+const bars = document.querySelectorAll('.s-bar');
+
+function animateBars(strength) {
+  bars.forEach((b, i) => {
+    setTimeout(() => {
+      const threshold = (i / bars.length) * 10;
+      b.classList.toggle('active', (strength / 10) > threshold);
+    }, i * 60);
+  });
+}
+
+function scanSignal() {
+  playBeep(440, 60);
+  setTimeout(() => playBeep(660, 80), 80);
+  const s = Math.floor(Math.random() * 31) + 60;
+  animateBars(s);
+  sys.scans++;
+  sys.lastAction = 'SCAN';
+  const result = signals[Math.floor(Math.random() * signals.length)];
+  document.getElementById('signalResult').textContent = '';
+  let i = 0;
+  const el = document.getElementById('signalResult');
+  const type = () => { if (i < result.length) { el.textContent += result[i++]; setTimeout(type, 20); } };
+  type();
+  typeLine('[SCAN] ' + result);
+}
+
+// ═══════════════════════════════════════
+//  ACTIONS
+// ═══════════════════════════════════════
+function copyCA() {
+  navigator.clipboard.writeText('BoBj68cWnCvzMNUKzJyR7Jq7tLM3v76D1pYL1E8rpump');
+  playBeep(880, 80);
+  sys.copies++;
+  typeLine('[CA COPIED TO MEMORY]', 'rgba(57,255,20,0.9)');
+  showToast('✓ CONTRACT ADDRESS COPIED');
+}
+
+function buySignal() {
+  playBeep(660, 60);
+  sys.buys++;
+  typeLine('[BUY SIGNAL INITIATED] › redirecting to market...');
+}
+
+function viewChartSignal() {
+  playBeep(550, 60);
+  typeLine('[CHART] › loading market interface...');
+}
+
+// ═══════════════════════════════════════
+//  IDLE DETECTION
+// ═══════════════════════════════════════
+let idleTimer;
+function resetIdle() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    sys.idleCount++;
+    typeLine('[IDLE] › no input detected... awaiting command');
+  }, 10000);
+}
+document.addEventListener('mousemove', resetIdle);
+document.addEventListener('keydown', resetIdle);
+resetIdle();
+</script>
+</body>
+</html>
