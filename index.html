@@ -246,8 +246,12 @@ body::before {
 }
 
 .hero-robot-wrap img {
-  width: min(620px, 82vw);
-  opacity: 0.78;
+  width: min(520px, 70vw);
+  opacity: 0.34;
+  transform: translateY(35px);
+  filter:
+    drop-shadow(0 0 18px rgba(108,255,58,0.35))
+    drop-shadow(0 0 40px rgba(108,255,58,0.12));
 }
 
 /* hologram light under robot */
@@ -456,6 +460,12 @@ footer {
 <!-- NEW HERO -->
 <section class="new-hero scan">
 
+    <div class="holo-base"></div>
+
+  <div class="hero-robot-wrap">
+    <img id="heroRobot" src="tate-ai-hologram-robot.png" class="hologram robot-live">
+  </div>
+  
  <div class="hero-content text-center">
    <div class="mb-5 glow text-sm tracking-[0.45em] opacity-80">
   TATEAI TERMINAL
