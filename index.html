@@ -1380,6 +1380,57 @@ document.getElementById('terminalInput').addEventListener('keydown', e => {
   addLog('root@tateai:~$ ' + cmd);
   e.target.value = '';
   setTimeout(() => {
+
+function smartReply(cmd) {
+  const text = cmd.toLowerCase();
+
+  if (
+    text.includes('tell me about') ||
+    text.includes('about terminal') ||
+    text.includes('what is this') ||
+    text.includes('explain') ||
+    text.includes('terminal')
+  ) {
+    return 'TATE AI Terminal is a signal interface: part market scanner, part intelligence layer, part memetic command system.';
+  }
+
+  if (
+    text.includes('who are you') ||
+    text.includes('what are you') ||
+    text.includes('are you alive')
+  ) {
+    return 'I am not alive. I am a terminal layer designed to read attention, decode signals, and respond to user behavior.';
+  }
+
+  if (
+    text.includes('tate ai') ||
+    text.includes('$tateai') ||
+    text.includes('token') ||
+    text.includes('coin')
+  ) {
+    return '$TATEAI is the token connected to the Terminal signal network on Solana.';
+  }
+
+  if (
+    text.includes('buy') ||
+    text.includes('how to buy') ||
+    text.includes('where buy') ||
+    text.includes('jupiter')
+  ) {
+    return 'To enter the market layer, use the BUY button or open Jupiter with the official contract address.';
+  }
+
+  if (
+    text.includes('signal') ||
+    text.includes('scan') ||
+    text.includes('scanner')
+  ) {
+    return 'The scanner reads symbolic market noise and converts it into terminal signals.';
+  }
+
+  return 'INPUT RECEIVED. Pattern unclear, but the Terminal is still listening. Try asking about the terminal, signal, token, scanner, or market.';
+}
+    
     const cmds = {
       'help': () => addLog('COMMANDS: status · price · contract · signal · scan · clear · state · matrix', 'sys'),
       'status': () => addLog('TERMINAL ONLINE — ALL NODES SYNCHRONIZED', 'sys'),
@@ -1392,7 +1443,7 @@ document.getElementById('terminalInput').addEventListener('keydown', e => {
       'matrix': () => { for(let i=0;i<5;i++) setTimeout(()=>addLog(Array(20).fill(0).map(()=>Math.random()>.5?'1':'0').join('')),i*200); },
     };
     if (cmds[cmd]) cmds[cmd]();
-    else addLog(`UNKNOWN: "${cmd}" — try: help`, 'err');
+    else addLog(smartReply(cmd), 'sys');
   }, 350);
 });
 
