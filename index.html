@@ -1425,6 +1425,16 @@ function smartReply(cmd) {
     return 'I am not alive. I am a terminal layer designed to read attention, decode signals, and respond to user behavior.';
   }
 
+
+if (
+    text.includes('chip') ||
+    text.includes('terminal chip') ||
+    text.includes('what is the chip')
+) {
+    return 'Search the hidden gem. It is already inside the terminal.';
+}
+  
+
   if (
     text.includes('tate ai') ||
     text.includes('$tateai') ||
